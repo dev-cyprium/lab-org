@@ -1,0 +1,26 @@
+.ns-strana {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+  padding: 4rem 1rem;
+
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: var(--laborg-primary, #00796b);
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin: 0;
+  }
+
+  p {
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0 0 1rem;
+  }
+}

@@ -1,0 +1,16 @@
+<section class="dashboard">
+  <header class="zaglavlje">
+    <h1>Dobrodošli u LabOrg</h1>
+    <p>Sistem za vođenje laboratorije za ispitivanje bezbednosti hrane i vode.</p>
+  </header>
+
+  <div class="kartice">
+    <mat-card class="kartica" *ngFor="let k of kartice" [routerLink]="k.putanja">
+      <mat-card-content>
+        <mat-icon>{{ k.ikonica }}</mat-icon>
+        <h2>{{ k.naziv }}</h2>
+        <p>{{ k.opis }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

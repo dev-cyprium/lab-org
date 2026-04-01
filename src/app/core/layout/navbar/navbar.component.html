@@ -1,0 +1,25 @@
+<mat-toolbar color="primary" class="navbar">
+  <button mat-icon-button (click)="toggleSidenav.emit()" aria-label="Meni">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <a routerLink="/pocetna" class="brend">
+    <mat-icon>biotech</mat-icon>
+    <span>LabOrg</span>
+  </a>
+
+  <span class="razmak"></span>
+
+  <button mat-button [matMenuTriggerFor]="korisnikMeni">
+    <mat-icon>account_circle</mat-icon>
+    <span class="korisnik-ime">Prijava</span>
+  </button>
+
+  <mat-menu #korisnikMeni="matMenu">
+    <!-- Prijava/odjava se dodaje u Fazi 3 (Firebase Auth). -->
+    <button mat-menu-item routerLink="/prijava">
+      <mat-icon>login</mat-icon>
+      <span>Prijavi se</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

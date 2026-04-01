@@ -1,0 +1,11 @@
+<mat-nav-list class="bocni-meni">
+  <a
+    mat-list-item
+    *ngFor="let stavka of meniStavke"
+    [routerLink]="stavka.putanja"
+    routerLinkActive="aktivna"
+  >
+    <mat-icon matListItemIcon>{{ stavka.ikonica }}</mat-icon>
+    <span matListItemTitle>{{ stavka.naziv }}</span>
+  </a>
+</mat-nav-list>

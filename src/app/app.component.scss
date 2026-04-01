@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.ljuska {
+  flex: 1 1 auto;
+}
+
+.bocna-strana {
+  width: 250px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sadrzaj {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.glavni {
+  flex: 1 1 auto;
+  padding: 1.5rem;
+}

@@ -1,0 +1,32 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brend {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+.razmak {
+  flex: 1 1 auto;
+}
+
+.korisnik-ime {
+  margin-left: 0.25rem;
+}
+
+@media (max-width: 600px) {
+  .korisnik-ime {
+    display: none;
+  }
+}

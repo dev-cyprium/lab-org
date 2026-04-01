@@ -1,0 +1,55 @@
+.dashboard {
+  .zaglavlje {
+    margin-bottom: 1.5rem;
+
+    h1 {
+      margin: 0 0 0.25rem;
+    }
+
+    p {
+      margin: 0;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+.kartice {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.kartica {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.5rem;
+
+    mat-icon {
+      font-size: 2.25rem;
+      width: 2.25rem;
+      height: 2.25rem;
+      color: var(--laborg-primary, #00796b);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+}
