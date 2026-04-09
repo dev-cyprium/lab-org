@@ -1,5 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { SharedModule } from '../shared/shared.module';
 import { NavbarComponent } from './layout/navbar/navbar.component';
@@ -9,7 +10,7 @@ import { FooterComponent } from './layout/footer/footer.component';
 // Singleton moduli, servisi i layout. Uvozi se SAMO u AppModule.
 @NgModule({
   declarations: [NavbarComponent, SidebarComponent, FooterComponent],
-  imports: [SharedModule, RouterModule],
+  imports: [SharedModule, RouterModule, HttpClientModule],
   exports: [NavbarComponent, SidebarComponent, FooterComponent],
 })
 export class CoreModule {
