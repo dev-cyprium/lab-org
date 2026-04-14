@@ -1,0 +1,74 @@
+<section class="lista">
+  <header class="zaglavlje">
+    <h1>Katalog mikroorganizama</h1>
+    <p>Patogeni, indikatorski i kvarljivci koji se prate u laboratoriji.</p>
+  </header>
+
+  <div class="filteri">
+    <mat-form-field appearance="outline">
+      <mat-label>Pretraga</mat-label>
+      <input
+        matInput
+        [(ngModel)]="pretraga"
+        (ngModelChange)="filtriraj()"
+        placeholder="naziv, latinski, namirnica..."
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tip</mat-label>
+      <mat-select [(ngModel)]="tipFilter" (ngModelChange)="filtriraj()">
+        <mat-option value="svi">Svi tipovi</mat-option>
+        <mat-option *ngFor="let t of tipovi" [value]="t">{{ t }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="spinner" *ngIf="ucitavanje">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <p class="greska" *ngIf="greska">Neuspešno učitavanje podataka.</p>
+
+  <table mat-table [dataSource]="prikazani" class="tabela" *ngIf="!ucitavanje && !greska">
+    <ng-container matColumnDef="naziv">
+      <th mat-header-cell *matHeaderCellDef>Naziv</th>
+      <td mat-cell *matCellDef="let m">{{ m.naziv }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="latinski">
+      <th mat-header-cell *matHeaderCellDef>Latinski naziv</th>
+      <td mat-cell *matCellDef="let m"><em>{{ m.latinskiNaziv }}</em></td>
+    </ng-container>
+
+    <ng-container matColumnDef="tip">
+      <th mat-header-cell *matHeaderCellDef>Tip</th>
+      <td mat-cell *matCellDef="let m">
+        <span class="oznaka" [ngClass]="'tip-' + m.tip.replace('/', '-')">{{ m.tip }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gram">
+      <th mat-header-cell *matHeaderCellDef>Gram</th>
+      <td mat-cell *matCellDef="let m">{{ m.gram }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="granica">
+      <th mat-header-cell *matHeaderCellDef>Granica</th>
+      <td mat-cell *matCellDef="let m">{{ m.granicaCFU }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="kolone"></tr>
+    <tr
+      mat-row
+      *matRowDef="let red; columns: kolone"
+      class="red"
+      [routerLink]="['/mikroorganizmi', red.id]"
+    ></tr>
+  </table>
+
+  <p class="prazno" *ngIf="!ucitavanje && !greska && prikazani.length === 0">
+    Nema mikroorganizama koji odgovaraju pretrazi.
+  </p>
+</section>

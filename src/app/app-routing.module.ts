@@ -11,6 +11,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
+  {
+    path: 'mikroorganizmi',
+    loadChildren: () =>
+      import('./features/mikroorganizmi/mikroorganizmi.module').then(
+        (m) => m.MikroorganizmiModule
+      ),
+  },
   { path: '**', component: PageNotFoundComponent },
 ];
 

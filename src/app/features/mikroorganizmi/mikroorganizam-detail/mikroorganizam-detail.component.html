@@ -1,0 +1,58 @@
+<section class="detalj">
+  <a mat-button routerLink="/mikroorganizmi">
+    <mat-icon>arrow_back</mat-icon>
+    Nazad na katalog
+  </a>
+
+  <div class="spinner" *ngIf="ucitavanje">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!ucitavanje">
+    <mat-card *ngIf="mikroorganizam as m; else nemaGa" class="kartica">
+      <mat-card-header>
+        <mat-card-title>{{ m.naziv }}</mat-card-title>
+        <mat-card-subtitle><em>{{ m.latinskiNaziv }}</em></mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="opis">{{ m.opis }}</p>
+
+        <div class="polja">
+          <div class="polje">
+            <span class="oznaka-polja">Tip</span>
+            <span>{{ m.tip }}</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Gram bojenje</span>
+            <span>{{ m.gram }}</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Oblik</span>
+            <span>{{ m.oblik }}</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Referentna granica</span>
+            <span>{{ m.granicaCFU }}</span>
+          </div>
+        </div>
+
+        <div class="blok">
+          <span class="oznaka-polja">Rizik</span>
+          <p>{{ m.rizik }}</p>
+        </div>
+
+        <div class="blok">
+          <span class="oznaka-polja">Tipične namirnice</span>
+          <mat-chip-set>
+            <mat-chip *ngFor="let n of m.tipicneNamirnice">{{ n }}</mat-chip>
+          </mat-chip-set>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-template #nemaGa>
+      <p class="prazno">Traženi mikroorganizam ne postoji.</p>
+    </ng-template>
+  </ng-container>
+</section>

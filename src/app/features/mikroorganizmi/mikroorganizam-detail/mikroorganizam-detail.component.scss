@@ -1,0 +1,53 @@
+.detalj {
+  max-width: 720px;
+
+  .kartica {
+    margin-top: 1rem;
+  }
+
+  .opis {
+    color: rgba(0, 0, 0, 0.75);
+    margin-bottom: 1.25rem;
+  }
+}
+
+.polja {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.polje,
+.blok {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.blok {
+  margin-bottom: 1rem;
+
+  p {
+    margin: 0.25rem 0 0;
+  }
+}
+
+.oznaka-polja {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--laborg-primary, #00796b);
+  font-weight: 600;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.prazno {
+  padding: 1.5rem;
+  color: rgba(0, 0, 0, 0.6);
+}

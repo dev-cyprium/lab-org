@@ -1,0 +1,81 @@
+.zaglavlje {
+  margin-bottom: 1rem;
+
+  h1 {
+    margin: 0 0 0.25rem;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.filteri {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  mat-form-field {
+    min-width: 240px;
+  }
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.tabela {
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+  .red {
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(0, 121, 107, 0.06);
+    }
+  }
+}
+
+// Obojene oznake po tipu mikroorganizma.
+.oznaka {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  &.tip-patogen {
+    background: #ffebee;
+    color: #c62828;
+  }
+  &.tip-indikator {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+  &.tip-kvarljivac {
+    background: #fff8e1;
+    color: #f9a825;
+  }
+  &.tip-kvasac-plesan {
+    background: #f3e5f5;
+    color: #6a1b9a;
+  }
+}
+
+.greska {
+  color: #c62828;
+}
+
+.prazno {
+  padding: 1.5rem;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+}
