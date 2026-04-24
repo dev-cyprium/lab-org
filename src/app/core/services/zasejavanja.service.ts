@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Mikroorganizam } from '../models';
+import { Zasejavanje } from '../models';
 import { JsonKolekcijaServis } from './json-kolekcija.servis';
 
 @Injectable({ providedIn: 'root' })
-export class MikroorganizmiService extends JsonKolekcijaServis<Mikroorganizam> {
-  protected putanja = 'assets/data/mikroorganizmi.json';
+export class ZasejavanjaService extends JsonKolekcijaServis<Zasejavanje> {
+  protected putanja = 'assets/data/zasejavanja.json';
 
   constructor(http: HttpClient) {
     super(http);

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "zj-001",
+    "oznaka": "ZS-0001",
+    "uzorakId": "uz-001",
+    "podlogaId": "pd-001",
+    "mikroorganizamId": "mo-001",
+    "datumZasejavanja": "2026-06-10",
+    "temperatura": 37,
+    "vremeInkubacije": 24,
+    "brojKolonija": 0,
+    "rezultat": "nije izraslo"
+  },
+  {
+    "id": "zj-002",
+    "oznaka": "ZS-0002",
+    "uzorakId": "uz-001",
+    "podlogaId": "pd-002",
+    "mikroorganizamId": "mo-005",
+    "datumZasejavanja": "2026-06-10",
+    "temperatura": 37,
+    "vremeInkubacije": 48,
+    "brojKolonija": 40,
+    "rezultat": "izraslo"
+  },
+  {
+    "id": "zj-003",
+    "oznaka": "ZS-0003",
+    "uzorakId": "uz-003",
+    "podlogaId": "pd-001",
+    "mikroorganizamId": "mo-001",
+    "datumZasejavanja": "2026-06-12",
+    "temperatura": 37,
+    "vremeInkubacije": 24,
+    "brojKolonija": 0,
+    "rezultat": "nije izraslo"
+  },
+  {
+    "id": "zj-004",
+    "oznaka": "ZS-0004",
+    "uzorakId": "uz-003",
+    "podlogaId": "pd-003",
+    "mikroorganizamId": "mo-010",
+    "datumZasejavanja": "2026-06-12",
+    "temperatura": 37,
+    "vremeInkubacije": 24,
+    "brojKolonija": 300,
+    "rezultat": "izraslo"
+  },
+  {
+    "id": "zj-005",
+    "oznaka": "ZS-0005",
+    "uzorakId": "uz-002",
+    "podlogaId": "pd-003",
+    "mikroorganizamId": "mo-003",
+    "datumZasejavanja": "2026-06-18",
+    "temperatura": 37,
+    "vremeInkubacije": 24,
+    "brojKolonija": 12,
+    "rezultat": "izraslo"
+  },
+  {
+    "id": "zj-006",
+    "oznaka": "ZS-0006",
+    "uzorakId": "uz-005",
+    "podlogaId": "pd-004",
+    "mikroorganizamId": "mo-011",
+    "datumZasejavanja": "2026-06-15",
+    "temperatura": 30,
+    "vremeInkubacije": 72,
+    "brojKolonija": 80000,
+    "rezultat": "izraslo"
+  },
+  {
+    "id": "zj-007",
+    "oznaka": "ZS-0007",
+    "uzorakId": "uz-007",
+    "podlogaId": "pd-005",
+    "mikroorganizamId": "mo-002",
+    "datumZasejavanja": "2026-06-14",
+    "temperatura": 37,
+    "vremeInkubacije": 48,
+    "brojKolonija": 850,
+    "rezultat": "izraslo"
+  },
+  {
+    "id": "zj-008",
+    "oznaka": "ZS-0008",
+    "uzorakId": "uz-007",
+    "podlogaId": "pd-002",
+    "mikroorganizamId": "mo-005",
+    "datumZasejavanja": "2026-06-14",
+    "temperatura": 37,
+    "vremeInkubacije": 48,
+    "brojKolonija": 40,
+    "rezultat": "izraslo"
+  },
+  {
+    "id": "zj-009",
+    "oznaka": "ZS-0009",
+    "uzorakId": "uz-006",
+    "podlogaId": "pd-003",
+    "mikroorganizamId": "mo-010",
+    "datumZasejavanja": "2026-06-21",
+    "temperatura": 37,
+    "vremeInkubacije": 24,
+    "brojKolonija": 0,
+    "rezultat": "nije izraslo"
+  },
+  {
+    "id": "zj-010",
+    "oznaka": "ZS-0010",
+    "uzorakId": "uz-004",
+    "podlogaId": "pd-005",
+    "mikroorganizamId": "mo-002",
+    "datumZasejavanja": "2026-06-25",
+    "temperatura": 37,
+    "vremeInkubacije": 48,
+    "brojKolonija": 0,
+    "rezultat": "u toku"
+  }
+]

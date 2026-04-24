@@ -1,0 +1,189 @@
+[
+  {
+    "id": "an-001",
+    "sifra": "AN-2026-0001",
+    "uzorakId": "uz-001",
+    "zaposleniId": "z-007",
+    "tip": "mikrobiološka",
+    "metoda": "SRPS EN ISO 6579-1 + ISO 6888-1",
+    "datumAnalize": "2026-06-12",
+    "stavke": [
+      {
+        "parametar": "Salmonella spp.",
+        "mikroorganizamId": "mo-001",
+        "vrednost": "odsutna",
+        "jedinica": "u 25 g",
+        "granica": "odsutna u 25 g",
+        "status": "ispravan"
+      },
+      {
+        "parametar": "Staphylococcus aureus",
+        "mikroorganizamId": "mo-005",
+        "vrednost": 40,
+        "jedinica": "CFU/g",
+        "granica": "100 CFU/g",
+        "status": "ispravan"
+      }
+    ],
+    "zakljucak": "ISPRAVAN"
+  },
+  {
+    "id": "an-002",
+    "sifra": "AN-2026-0002",
+    "uzorakId": "uz-003",
+    "zaposleniId": "z-007",
+    "tip": "mikrobiološka",
+    "metoda": "SRPS EN ISO 6579-1 + ISO 16649-2 + ISO 21528-2",
+    "datumAnalize": "2026-06-14",
+    "stavke": [
+      {
+        "parametar": "Salmonella spp.",
+        "mikroorganizamId": "mo-001",
+        "vrednost": "odsutna",
+        "jedinica": "u 25 g",
+        "granica": "odsutna u 25 g",
+        "status": "ispravan"
+      },
+      {
+        "parametar": "Escherichia coli",
+        "mikroorganizamId": "mo-003",
+        "vrednost": 45,
+        "jedinica": "CFU/g",
+        "granica": "50 CFU/g",
+        "status": "ispravan"
+      },
+      {
+        "parametar": "Enterobacteriaceae",
+        "mikroorganizamId": "mo-009",
+        "vrednost": 300,
+        "jedinica": "CFU/g",
+        "granica": "10 CFU/g",
+        "status": "neispravan"
+      }
+    ],
+    "zakljucak": "NEISPRAVAN"
+  },
+  {
+    "id": "an-003",
+    "sifra": "AN-2026-0003",
+    "uzorakId": "uz-002",
+    "zaposleniId": "z-007",
+    "tip": "mikrobiološka",
+    "metoda": "SRPS EN ISO 9308-1",
+    "datumAnalize": "2026-06-20",
+    "stavke": [
+      {
+        "parametar": "Escherichia coli",
+        "mikroorganizamId": "mo-003",
+        "vrednost": 12,
+        "jedinica": "CFU/100 mL",
+        "granica": "0/100 mL",
+        "status": "neispravan"
+      },
+      {
+        "parametar": "Koliformne bakterije",
+        "mikroorganizamId": "mo-010",
+        "vrednost": 8,
+        "jedinica": "CFU/100 mL",
+        "granica": "0/100 mL",
+        "status": "neispravan"
+      }
+    ],
+    "zakljucak": "NEISPRAVAN"
+  },
+  {
+    "id": "an-004",
+    "sifra": "AN-2026-0004",
+    "uzorakId": "uz-005",
+    "zaposleniId": "z-005",
+    "tip": "mikrobiološka",
+    "metoda": "SRPS EN ISO 4833-1",
+    "datumAnalize": "2026-06-18",
+    "stavke": [
+      {
+        "parametar": "Aerobne mezofilne bakterije",
+        "mikroorganizamId": "mo-011",
+        "vrednost": 80000,
+        "jedinica": "CFU/cm²",
+        "granica": "100000 CFU/cm²",
+        "status": "ispravan"
+      }
+    ],
+    "zakljucak": "ISPRAVAN"
+  },
+  {
+    "id": "an-005",
+    "sifra": "AN-2026-0005",
+    "uzorakId": "uz-007",
+    "zaposleniId": "z-007",
+    "tip": "mikrobiološka",
+    "metoda": "SRPS EN ISO 11290-2 + ISO 6888-1",
+    "datumAnalize": "2026-06-16",
+    "stavke": [
+      {
+        "parametar": "Listeria monocytogenes",
+        "mikroorganizamId": "mo-002",
+        "vrednost": 850,
+        "jedinica": "CFU/g",
+        "granica": "100 CFU/g",
+        "status": "neispravan"
+      },
+      {
+        "parametar": "Staphylococcus aureus",
+        "mikroorganizamId": "mo-005",
+        "vrednost": 40,
+        "jedinica": "CFU/g",
+        "granica": "100 CFU/g",
+        "status": "ispravan"
+      }
+    ],
+    "zakljucak": "NEISPRAVAN"
+  },
+  {
+    "id": "an-006",
+    "sifra": "AN-2026-0006",
+    "uzorakId": "uz-008",
+    "zaposleniId": "z-006",
+    "tip": "hemijska",
+    "metoda": "HPLC-FLD (EU 2023/915)",
+    "datumAnalize": "2026-06-19",
+    "stavke": [
+      {
+        "parametar": "Aflatoksin B1",
+        "vrednost": 1.1,
+        "jedinica": "µg/kg",
+        "granica": "2 µg/kg",
+        "status": "ispravan"
+      }
+    ],
+    "zakljucak": "ISPRAVAN"
+  },
+  {
+    "id": "an-007",
+    "sifra": "AN-2026-0007",
+    "uzorakId": "uz-006",
+    "zaposleniId": "z-007",
+    "tip": "mikrobiološka",
+    "metoda": "SRPS EN ISO 9308-1 + ISO 16266",
+    "datumAnalize": "2026-06-24",
+    "stavke": [
+      {
+        "parametar": "Koliformne bakterije",
+        "mikroorganizamId": "mo-010",
+        "vrednost": 0,
+        "jedinica": "CFU/100 mL",
+        "granica": "0/100 mL",
+        "status": "ispravan"
+      },
+      {
+        "parametar": "Pseudomonas aeruginosa",
+        "mikroorganizamId": "mo-014",
+        "vrednost": 0,
+        "jedinica": "CFU/250 mL",
+        "granica": "0/250 mL",
+        "status": "ispravan"
+      }
+    ],
+    "zakljucak": "ISPRAVAN"
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "z-001",
+    "ime": "Ana",
+    "prezime": "Jovanović",
+    "pozicija": "šef laboratorije",
+    "email": "ana.jovanovic@laborg.rs",
+    "telefon": "060 111 2201",
+    "strucnaSprema": "Doktor mikrobioloških nauka",
+    "laboratorijaId": "lab-001",
+    "datumZaposlenja": "2015-03-01",
+    "aktivan": true
+  },
+  {
+    "id": "z-002",
+    "ime": "Marko",
+    "prezime": "Petrović",
+    "pozicija": "šef laboratorije",
+    "email": "marko.petrovic@laborg.rs",
+    "telefon": "060 111 2202",
+    "strucnaSprema": "Master hemije",
+    "laboratorijaId": "lab-002",
+    "datumZaposlenja": "2016-09-15",
+    "aktivan": true
+  },
+  {
+    "id": "z-003",
+    "ime": "Ivana",
+    "prezime": "Nikolić",
+    "pozicija": "šef laboratorije",
+    "email": "ivana.nikolic@laborg.rs",
+    "telefon": "060 111 2203",
+    "strucnaSprema": "Master tehnologije",
+    "laboratorijaId": "lab-003",
+    "datumZaposlenja": "2017-01-10",
+    "aktivan": true
+  },
+  {
+    "id": "z-004",
+    "ime": "Nikola",
+    "prezime": "Đorđević",
+    "pozicija": "uzorkovač",
+    "email": "nikola.djordjevic@laborg.rs",
+    "telefon": "060 111 2204",
+    "strucnaSprema": "Viša tehnološka škola",
+    "laboratorijaId": "lab-001",
+    "datumZaposlenja": "2019-06-01",
+    "aktivan": true
+  },
+  {
+    "id": "z-005",
+    "ime": "Jelena",
+    "prezime": "Stanković",
+    "pozicija": "laborant",
+    "email": "jelena.stankovic@laborg.rs",
+    "telefon": "060 111 2205",
+    "strucnaSprema": "Srednja medicinska škola",
+    "laboratorijaId": "lab-001",
+    "datumZaposlenja": "2020-02-17",
+    "aktivan": true
+  },
+  {
+    "id": "z-006",
+    "ime": "Stefan",
+    "prezime": "Ilić",
+    "pozicija": "analitičar",
+    "email": "stefan.ilic@laborg.rs",
+    "telefon": "060 111 2206",
+    "strucnaSprema": "Master hemije",
+    "laboratorijaId": "lab-002",
+    "datumZaposlenja": "2018-11-05",
+    "aktivan": true
+  },
+  {
+    "id": "z-007",
+    "ime": "Milica",
+    "prezime": "Pavlović",
+    "pozicija": "mikrobiolog",
+    "email": "milica.pavlovic@laborg.rs",
+    "telefon": "060 111 2207",
+    "strucnaSprema": "Diplomirani biolog",
+    "laboratorijaId": "lab-001",
+    "datumZaposlenja": "2021-09-01",
+    "aktivan": true
+  },
+  {
+    "id": "z-008",
+    "ime": "Đorđe",
+    "prezime": "Kostić",
+    "pozicija": "kontrolor kvaliteta",
+    "email": "djordje.kostic@laborg.rs",
+    "telefon": "060 111 2208",
+    "strucnaSprema": "Master tehnologije",
+    "laboratorijaId": "lab-003",
+    "datumZaposlenja": "2014-04-20",
+    "aktivan": false
+  }
+]

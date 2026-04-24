@@ -1,0 +1,29 @@
+[
+  {
+    "id": "lab-001",
+    "naziv": "Mikrobiološka laboratorija",
+    "tip": "mikrobiološka",
+    "lokacija": "Zgrada A, prizemlje",
+    "kontakt": "mikro@laborg.rs / 011 123 4501",
+    "sefId": "z-001",
+    "opis": "Ispitivanje patogenih i indikatorskih mikroorganizama u hrani i vodi."
+  },
+  {
+    "id": "lab-002",
+    "naziv": "Hemijska laboratorija",
+    "tip": "hemijska",
+    "lokacija": "Zgrada A, prvi sprat",
+    "kontakt": "hemija@laborg.rs / 011 123 4502",
+    "sefId": "z-002",
+    "opis": "Analiza kontaminanata: teški metali, mikotoksini, nitrati i aditivi."
+  },
+  {
+    "id": "lab-003",
+    "naziv": "Fizičko-hemijska laboratorija",
+    "tip": "fizičko-hemijska",
+    "lokacija": "Zgrada B, prizemlje",
+    "kontakt": "fizhem@laborg.rs / 011 123 4503",
+    "sefId": "z-003",
+    "opis": "Merenje fizičko-hemijskih parametara vode i namirnica."
+  }
+]
