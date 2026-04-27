@@ -37,3 +37,135 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   background: #f5f5f5;
 }
+
+// Zajedničke pomoćne klase koje se ponavljaju kroz feature ekrane.
+.zaglavlje {
+  margin-bottom: 1rem;
+
+  h1 {
+    margin: 0 0 0.25rem;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.prazno {
+  padding: 1.5rem;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.filteri {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  mat-form-field {
+    min-width: 220px;
+  }
+}
+
+.tabela {
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+  .red {
+    cursor: pointer;
+  }
+  .red:hover {
+    background: rgba(0, 121, 107, 0.06);
+  }
+}
+
+.kartice {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.kartica {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.kartica:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+mat-icon.mini {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+  vertical-align: middle;
+  color: var(--laborg-primary, #00796b);
+}
+
+// Zajednički stilovi za detalj ekrane.
+.detalj {
+  max-width: 760px;
+
+  .kartica-detalj {
+    margin-top: 1rem;
+  }
+
+  .opis {
+    color: rgba(0, 0, 0, 0.75);
+    margin-bottom: 1.25rem;
+  }
+}
+
+.polja {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.polje {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.oznaka-polja {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--laborg-primary, #00796b);
+  font-weight: 600;
+}
+
+// Obojene oznake (badge) za statuse/tipove.
+.oznaka {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.oznaka.ok {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+.oznaka.lose {
+  background: #ffebee;
+  color: #c62828;
+}
+.oznaka.neutral {
+  background: #eceff1;
+  color: #455a64;
+}
+

@@ -1,0 +1,41 @@
+<section class="detalj">
+  <a mat-button routerLink="/laboratorije">
+    <mat-icon>arrow_back</mat-icon>
+    Nazad na laboratorije
+  </a>
+
+  <div class="spinner" *ngIf="ucitavanje">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!ucitavanje">
+    <mat-card *ngIf="laboratorija as lab; else nemaGa" class="kartica-detalj">
+      <mat-card-header>
+        <mat-card-title>{{ lab.naziv }}</mat-card-title>
+        <mat-card-subtitle>{{ lab.tip }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="opis">{{ lab.opis }}</p>
+        <div class="polja">
+          <div class="polje"><span class="oznaka-polja">Lokacija</span><span>{{ lab.lokacija }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Kontakt</span><span>{{ lab.kontakt }}</span></div>
+          <div class="polje">
+            <span class="oznaka-polja">Šef laboratorije</span>
+            <span>{{ sef ? sef.ime + ' ' + sef.prezime : '—' }}</span>
+          </div>
+        </div>
+
+        <h3>Zaposleni ({{ osoblje.length }})</h3>
+        <mat-list>
+          <a mat-list-item *ngFor="let z of osoblje" [routerLink]="['/zaposleni', z.id]">
+            <mat-icon matListItemIcon>badge</mat-icon>
+            <span matListItemTitle>{{ z.ime }} {{ z.prezime }}</span>
+            <span matListItemLine>{{ z.pozicija }}</span>
+          </a>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-template #nemaGa><p class="prazno">Laboratorija ne postoji.</p></ng-template>
+  </ng-container>
+</section>

@@ -18,6 +18,16 @@ const routes: Routes = [
         (m) => m.MikroorganizmiModule
       ),
   },
+  {
+    path: 'laboratorije',
+    loadChildren: () =>
+      import('./features/laboratorije/laboratorije.module').then((m) => m.LaboratorijeModule),
+  },
+  {
+    path: 'zaposleni',
+    loadChildren: () =>
+      import('./features/zaposleni/zaposleni.module').then((m) => m.ZaposleniModule),
+  },
   { path: '**', component: PageNotFoundComponent },
 ];
 

@@ -1,0 +1,42 @@
+<section class="detalj">
+  <a mat-button routerLink="/zaposleni">
+    <mat-icon>arrow_back</mat-icon>
+    Nazad na zaposlene
+  </a>
+
+  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <ng-container *ngIf="!ucitavanje">
+    <mat-card *ngIf="zaposleni as z; else nemaGa" class="kartica-detalj">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>badge</mat-icon>
+        <mat-card-title>{{ z.ime }} {{ z.prezime }}</mat-card-title>
+        <mat-card-subtitle>{{ z.pozicija }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="polja">
+          <div class="polje"><span class="oznaka-polja">Email</span><span>{{ z.email }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Telefon</span><span>{{ z.telefon }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Stručna sprema</span><span>{{ z.strucnaSprema }}</span></div>
+          <div class="polje">
+            <span class="oznaka-polja">Laboratorija</span>
+            <a *ngIf="laboratorija" [routerLink]="['/laboratorije', laboratorija.id]">{{ laboratorija.naziv }}</a>
+            <span *ngIf="!laboratorija">—</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Datum zaposlenja</span>
+            <span>{{ z.datumZaposlenja | datumSr }}</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Status</span>
+            <span class="oznaka" [ngClass]="z.aktivan ? 'ok' : 'neutral'">
+              {{ z.aktivan ? 'aktivan' : 'neaktivan' }}
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-template #nemaGa><p class="prazno">Zaposleni ne postoji.</p></ng-template>
+  </ng-container>
+</section>
