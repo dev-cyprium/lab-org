@@ -28,6 +28,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/zaposleni/zaposleni.module').then((m) => m.ZaposleniModule),
   },
+  {
+    path: 'podloge',
+    loadChildren: () => import('./features/podloge/podloge.module').then((m) => m.PodlogeModule),
+  },
   { path: '**', component: PageNotFoundComponent },
 ];
 

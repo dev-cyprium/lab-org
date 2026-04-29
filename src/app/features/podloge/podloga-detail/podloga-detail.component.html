@@ -1,0 +1,37 @@
+<section class="detalj">
+  <a mat-button routerLink="/podloge">
+    <mat-icon>arrow_back</mat-icon>
+    Nazad na podloge
+  </a>
+
+  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <ng-container *ngIf="!ucitavanje">
+    <mat-card *ngIf="podloga as p; else nemaGa" class="kartica-detalj" [appHighlightOpasno]="p.klasaOpasnosti">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>{{ p.klasaOpasnosti | klasaOpasnosti: 'ikonica' }}</mat-icon>
+        <mat-card-title>{{ p.naziv }}</mat-card-title>
+        <mat-card-subtitle>{{ p.tip }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="opis">{{ p.namena }}</p>
+        <div class="polja">
+          <div class="polje"><span class="oznaka-polja">Koncentracija</span><span>{{ p.koncentracija }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Količina</span><span>{{ p.kolicina }} {{ p.jedinica }}</span></div>
+          <div class="polje">
+            <span class="oznaka-polja">Klasa opasnosti</span>
+            <span>{{ p.klasaOpasnosti | klasaOpasnosti }}</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Rok trajanja</span>
+            <span>{{ p.datumIsteka | datumSr }} ({{ p.datumIsteka | istek }})</span>
+          </div>
+          <div class="polje"><span class="oznaka-polja">Proizvođač</span><span>{{ p.proizvodjac }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Lokacija</span><span>{{ p.lokacija }}</span></div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-template #nemaGa><p class="prazno">Podloga ne postoji.</p></ng-template>
+  </ng-container>
+</section>

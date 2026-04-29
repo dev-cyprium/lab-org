@@ -1,0 +1,48 @@
+<section>
+  <header class="zaglavlje">
+    <h1>Podloge i reagensi</h1>
+    <p>Hranljive podloge, reagensi i hemikalije u laboratoriji. Opasne stavke su istaknute.</p>
+  </header>
+
+  <div class="filteri">
+    <mat-form-field appearance="outline">
+      <mat-label>Pretraga</mat-label>
+      <input matInput [(ngModel)]="pretraga" (ngModelChange)="filtriraj()" placeholder="naziv, namena..." />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tip</mat-label>
+      <mat-select [(ngModel)]="tipFilter" (ngModelChange)="filtriraj()">
+        <mat-option value="sve">Svi tipovi</mat-option>
+        <mat-option *ngFor="let t of tipovi" [value]="t">{{ t }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <div class="kartice" *ngIf="!ucitavanje">
+    <mat-card
+      class="kartica"
+      *ngFor="let p of prikazane"
+      [appHighlightOpasno]="p.klasaOpasnosti"
+      [routerLink]="['/podloge', p.id]"
+    >
+      <mat-card-header>
+        <mat-icon mat-card-avatar>{{ p.klasaOpasnosti | klasaOpasnosti: 'ikonica' }}</mat-icon>
+        <mat-card-title>{{ p.naziv }}</mat-card-title>
+        <mat-card-subtitle>{{ p.tip }} · {{ p.klasaOpasnosti | klasaOpasnosti }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="namena">{{ p.namena }}</p>
+        <p class="istek">
+          <mat-icon class="mini">event</mat-icon>
+          {{ p.datumIsteka | datumSr }} ({{ p.datumIsteka | istek }})
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <p class="prazno" *ngIf="!ucitavanje && prikazane.length === 0">Nema podloga koje odgovaraju pretrazi.</p>
+</section>
