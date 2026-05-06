@@ -1,0 +1,68 @@
+<section class="detalj sirok">
+  <a mat-button routerLink="/uzorci">
+    <mat-icon>arrow_back</mat-icon>
+    Nazad na uzorke
+  </a>
+
+  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <ng-container *ngIf="!ucitavanje">
+    <mat-card *ngIf="uzorak as u; else nemaGa" class="kartica-detalj">
+      <mat-card-header>
+        <mat-card-title>{{ u.naziv }}</mat-card-title>
+        <mat-card-subtitle>{{ u.sifra }} · {{ u.vrsta }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="polja">
+          <div class="polje"><span class="oznaka-polja">Poreklo</span><span>{{ u.poreklo }}</span></div>
+          <div class="polje">
+            <span class="oznaka-polja">Uzorkovač</span>
+            <a *ngIf="uzorkovac" [routerLink]="['/zaposleni', uzorkovac.id]">{{ uzorkovac.ime }} {{ uzorkovac.prezime }}</a>
+            <span *ngIf="!uzorkovac">—</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Laboratorija</span>
+            <a *ngIf="laboratorija" [routerLink]="['/laboratorije', laboratorija.id]">{{ laboratorija.naziv }}</a>
+          </div>
+          <div class="polje"><span class="oznaka-polja">Datum uzorkovanja</span><span>{{ u.datumUzorkovanja | datumSr }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Datum prijema</span><span>{{ u.datumPrijema | datumSr }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Količina</span><span>{{ u.kolicina }} {{ u.jedinica }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Temp. prijema</span><span>{{ u.temperaturaPrijema }} °C</span></div>
+          <div class="polje"><span class="oznaka-polja">Status</span><span class="oznaka info">{{ u.status }}</span></div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <h3>Zasejavanja ({{ zasejavanja.length }})</h3>
+        <table *ngIf="zasejavanja.length" class="tabelica">
+          <tr>
+            <th>Oznaka</th><th>Podloga</th><th>Ciljni organizam</th><th>Kolonije</th><th>Rezultat</th>
+          </tr>
+          <tr *ngFor="let z of zasejavanja">
+            <td>{{ z.zasejavanje.oznaka }}</td>
+            <td>{{ z.podloga }}</td>
+            <td>{{ z.mikroorganizam }}</td>
+            <td>{{ z.zasejavanje.brojKolonija | cfu: 'CFU' }}</td>
+            <td>{{ z.zasejavanje.rezultat }}</td>
+          </tr>
+        </table>
+        <p class="prazno" *ngIf="!zasejavanja.length">Nema zasejavanja za ovaj uzorak.</p>
+
+        <h3>Analize ({{ analize.length }})</h3>
+        <mat-list *ngIf="analize.length">
+          <a mat-list-item *ngFor="let a of analize" [routerLink]="['/analize', a.id]">
+            <mat-icon matListItemIcon>fact_check</mat-icon>
+            <span matListItemTitle>{{ a.sifra }} — {{ a.tip }}</span>
+            <span matListItemLine>{{ a.datumAnalize | datumSr }}</span>
+            <span matListItemMeta class="oznaka" [ngClass]="a.zakljucak === 'ISPRAVAN' ? 'ok' : 'lose'">
+              {{ a.zakljucak | ocena }}
+            </span>
+          </a>
+        </mat-list>
+        <p class="prazno" *ngIf="!analize.length">Još nema analiza za ovaj uzorak.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-template #nemaGa><p class="prazno">Uzorak ne postoji.</p></ng-template>
+  </ng-container>
+</section>

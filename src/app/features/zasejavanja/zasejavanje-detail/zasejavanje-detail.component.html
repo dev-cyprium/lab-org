@@ -1,0 +1,43 @@
+<section class="detalj">
+  <a mat-button routerLink="/zasejavanja">
+    <mat-icon>arrow_back</mat-icon>
+    Nazad na zasejavanja
+  </a>
+
+  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <ng-container *ngIf="!ucitavanje">
+    <mat-card *ngIf="zasejavanje as z; else nemaGa" class="kartica-detalj">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>grain</mat-icon>
+        <mat-card-title>{{ z.oznaka }}</mat-card-title>
+        <mat-card-subtitle>{{ z.datumZasejavanja | datumSr }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="polja">
+          <div class="polje">
+            <span class="oznaka-polja">Uzorak</span>
+            <a *ngIf="uzorak" [routerLink]="['/uzorci', uzorak.id]">{{ uzorak.naziv }}</a>
+            <span *ngIf="!uzorak">—</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Podloga</span>
+            <a *ngIf="podloga" [routerLink]="['/podloge', podloga.id]">{{ podloga.naziv }}</a>
+            <span *ngIf="!podloga">—</span>
+          </div>
+          <div class="polje">
+            <span class="oznaka-polja">Ciljni organizam</span>
+            <a *ngIf="mikroorganizam" [routerLink]="['/mikroorganizmi', mikroorganizam.id]">{{ mikroorganizam.naziv }}</a>
+            <span *ngIf="!mikroorganizam">—</span>
+          </div>
+          <div class="polje"><span class="oznaka-polja">Temperatura</span><span>{{ z.temperatura }} °C</span></div>
+          <div class="polje"><span class="oznaka-polja">Vreme inkubacije</span><span>{{ z.vremeInkubacije }} h</span></div>
+          <div class="polje"><span class="oznaka-polja">Broj kolonija</span><span>{{ z.brojKolonija | cfu: 'CFU' }}</span></div>
+          <div class="polje"><span class="oznaka-polja">Rezultat</span><span>{{ z.rezultat }}</span></div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-template #nemaGa><p class="prazno">Zasejavanje ne postoji.</p></ng-template>
+  </ng-container>
+</section>

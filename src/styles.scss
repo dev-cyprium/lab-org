@@ -116,6 +116,10 @@ mat-icon.mini {
 .detalj {
   max-width: 760px;
 
+  &.sirok {
+    max-width: 960px;
+  }
+
   .kartica-detalj {
     margin-top: 1rem;
   }
@@ -123,6 +127,30 @@ mat-icon.mini {
   .opis {
     color: rgba(0, 0, 0, 0.75);
     margin-bottom: 1.25rem;
+  }
+
+  h3 {
+    margin: 1.25rem 0 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+// Prosta tabela unutar detalja (zasejavanja, stavke analize).
+.tabelica {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  th {
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 600;
   }
 }
 
@@ -167,5 +195,9 @@ mat-icon.mini {
 .oznaka.neutral {
   background: #eceff1;
   color: #455a64;
+}
+.oznaka.info {
+  background: #e3f2fd;
+  color: #1565c0;
 }
 

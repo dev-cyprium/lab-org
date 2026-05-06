@@ -32,6 +32,19 @@ const routes: Routes = [
     path: 'podloge',
     loadChildren: () => import('./features/podloge/podloge.module').then((m) => m.PodlogeModule),
   },
+  {
+    path: 'uzorci',
+    loadChildren: () => import('./features/uzorci/uzorci.module').then((m) => m.UzorciModule),
+  },
+  {
+    path: 'zasejavanja',
+    loadChildren: () =>
+      import('./features/zasejavanja/zasejavanja.module').then((m) => m.ZasejavanjaModule),
+  },
+  {
+    path: 'analize',
+    loadChildren: () => import('./features/analize/analize.module').then((m) => m.AnalizeModule),
+  },
   { path: '**', component: PageNotFoundComponent },
 ];
 

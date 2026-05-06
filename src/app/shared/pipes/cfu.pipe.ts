@@ -16,8 +16,15 @@ const EKSPONENTI: Record<string, string> = {
 // Broj kolonija u naučni zapis, npr 120000 -> "1.2 × 10⁵ CFU/g".
 @Pipe({ name: 'cfu' })
 export class CfuPipe implements PipeTransform {
-  transform(value: number | null | undefined, jedinica = 'CFU/g'): string {
-    if (value === null || value === undefined || isNaN(value)) {
+  transform(value: number | string | null | undefined, jedinica = 'CFU/g'): string {
+    if (value === null || value === undefined) {
+      return '—';
+    }
+    // Tekstualna vrednost (npr "odsutna") se prikazuje kako jeste.
+    if (typeof value === 'string') {
+      return value;
+    }
+    if (isNaN(value)) {
       return '—';
     }
     if (value === 0) {
