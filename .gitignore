@@ -43,3 +43,13 @@ Thumbs.db
 
 # Local planning / working notes (kept out of history)
 /PLAN.md
+
+# Alati (lokalno okruženje) — ne ide u repo
+/.claude/
+/.agents/
+/skills-lock.json
+
+# Firebase lokalni keš / logovi
+/.firebase/
+firebase-debug.log
+firestore-debug.log
