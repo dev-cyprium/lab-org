@@ -4,6 +4,37 @@
     <p>Sistem za vođenje laboratorije za ispitivanje bezbednosti hrane i vode.</p>
   </header>
 
+  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <div class="statistika" *ngIf="statistika as s">
+    <mat-card class="stat">
+      <mat-icon>science</mat-icon>
+      <div class="broj">{{ s.ukupnoUzoraka }}</div>
+      <div class="labela">Ukupno uzoraka</div>
+    </mat-card>
+    <mat-card class="stat">
+      <mat-icon>hourglass_top</mat-icon>
+      <div class="broj">{{ s.uAnalizi }}</div>
+      <div class="labela">U obradi</div>
+    </mat-card>
+    <mat-card class="stat">
+      <mat-icon>fact_check</mat-icon>
+      <div class="broj">{{ s.ukupnoAnaliza }}</div>
+      <div class="labela">Analiza</div>
+    </mat-card>
+    <mat-card class="stat lose" [class.bez-problema]="s.neispravnih === 0">
+      <mat-icon>gpp_bad</mat-icon>
+      <div class="broj">{{ s.neispravnih }} <small>({{ s.procenatNeispravnih }}%)</small></div>
+      <div class="labela">Neispravnih nalaza</div>
+    </mat-card>
+    <mat-card class="stat" [class.upozorenje]="s.istekloPodloga > 0">
+      <mat-icon>event_busy</mat-icon>
+      <div class="broj">{{ s.istekloPodloga }}</div>
+      <div class="labela">Isteklih podloga</div>
+    </mat-card>
+  </div>
+
+  <h2 class="podnaslov">Brzi pristup</h2>
   <div class="kartice">
     <mat-card class="kartica" *ngFor="let k of kartice" [routerLink]="k.putanja">
       <mat-card-content>

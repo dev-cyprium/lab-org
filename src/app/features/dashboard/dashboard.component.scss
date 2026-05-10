@@ -13,6 +13,57 @@
   }
 }
 
+.podnaslov {
+  margin: 1.75rem 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.statistika {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.stat {
+  text-align: center;
+  padding: 1rem 0.5rem;
+
+  mat-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    color: var(--laborg-primary, #00796b);
+  }
+
+  .broj {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.2;
+
+    small {
+      font-size: 1rem;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  .labela {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  // Crveni akcenat kad ima neispravnih nalaza.
+  &.lose:not(.bez-problema) mat-icon,
+  &.lose:not(.bez-problema) .broj {
+    color: #c62828;
+  }
+
+  &.upozorenje mat-icon,
+  &.upozorenje .broj {
+    color: #f9a825;
+  }
+}
+
 .kartice {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
