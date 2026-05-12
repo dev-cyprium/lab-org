@@ -8,6 +8,7 @@ export type KlasaOpasnosti =
 
 export interface Podloga {
   id: string;
+  kompanijaId: string; // tenant vlasnik
   naziv: string; // npr "XLD agar", "Baird-Parker"
   tip: TipPodloge;
   namena: string; // ciljni organizam ili parametar

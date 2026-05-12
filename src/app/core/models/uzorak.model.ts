@@ -8,6 +8,7 @@ export type StatusUzorka = 'primljen' | 'u analizi' | 'završen' | 'arhiviran';
 
 export interface Uzorak {
   id: string;
+  kompanijaId: string; // tenant vlasnik
   sifra: string; // npr "UZ-2026-0001"
   vrsta: VrstaUzorka;
   naziv: string; // npr "Pileće grudi", "Voda za piće - bunar 3"

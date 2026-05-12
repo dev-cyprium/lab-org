@@ -14,6 +14,7 @@ export interface StavkaAnalize {
 
 export interface Analiza {
   id: string;
+  kompanijaId: string; // tenant vlasnik
   sifra: string; // npr "AN-2026-0001"
   uzorakId: string; // ref → Uzorak
   zaposleniId: string; // ref → Zaposleni (analitičar)

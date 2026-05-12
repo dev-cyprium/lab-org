@@ -1,3 +1,4 @@
+export * from './kompanija.model';
 export * from './mikroorganizam.model';
 export * from './podloga.model';
 export * from './uzorak.model';

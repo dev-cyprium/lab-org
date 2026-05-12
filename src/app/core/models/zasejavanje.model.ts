@@ -6,6 +6,7 @@ export type RezultatZasejavanja =
 
 export interface Zasejavanje {
   id: string;
+  kompanijaId: string; // tenant vlasnik
   oznaka: string;
   uzorakId: string; // ref → Uzorak koji je zasejan
   podlogaId: string; // ref → Podloga

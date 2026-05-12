@@ -6,6 +6,7 @@ export type TipLaboratorije =
 
 export interface Laboratorija {
   id: string;
+  kompanijaId: string; // tenant vlasnik
   naziv: string;
   tip: TipLaboratorije;
   lokacija: string;

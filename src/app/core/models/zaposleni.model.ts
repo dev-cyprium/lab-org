@@ -8,6 +8,7 @@ export type Pozicija =
 
 export interface Zaposleni {
   id: string;
+  kompanijaId: string; // tenant vlasnik
   ime: string;
   prezime: string;
   pozicija: Pozicija;
