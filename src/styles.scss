@@ -135,6 +135,51 @@ mat-icon.mini {
   }
 }
 
+// Ekrani za prijavu i registraciju.
+.auth-omot {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1rem;
+}
+
+.auth-kartica {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+
+  .brend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--laborg-primary, #00796b);
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    margin: 0 0 1.25rem;
+    font-size: 1.5rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  button[type='submit'] {
+    margin-top: 0.5rem;
+  }
+
+  .prebaci {
+    margin: 1rem 0 0;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.7);
+  }
+}
+
 // Prosta tabela unutar detalja (zasejavanja, stavke analize).
 .tabelica {
   width: 100%;

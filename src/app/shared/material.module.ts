@@ -19,6 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatRadioModule } from '@angular/material/radio';
 
 // Jedno mesto za sve Material module — SharedModule ga reeksportuje dalje.
 const MATERIAL = [
@@ -41,6 +42,7 @@ const MATERIAL = [
   MatProgressSpinnerModule,
   MatMenuModule,
   MatDividerModule,
+  MatRadioModule,
 ];
 
 @NgModule({

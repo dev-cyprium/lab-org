@@ -1,7 +1,13 @@
 <app-navbar (toggleSidenav)="drawer.toggle()"></app-navbar>
 
 <mat-sidenav-container class="ljuska">
-  <mat-sidenav #drawer mode="side" opened class="bocna-strana">
+  <mat-sidenav
+    #drawer
+    mode="side"
+    [opened]="(prijavljen$ | async) ?? false"
+    [disableClose]="true"
+    class="bocna-strana"
+  >
     <app-sidebar></app-sidebar>
   </mat-sidenav>
 
