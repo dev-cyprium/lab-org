@@ -4,6 +4,8 @@ import {
   authState,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
   signOut,
 } from '@angular/fire/auth';
 import {
@@ -68,6 +70,15 @@ export class AuthService {
     return this.trenutni.value?.uloga === 'admin';
   }
 
+  // Podaci sa Google naloga (kad korisnik tek treba da izabere firmu).
+  get googleIme(): string | null {
+    return this.auth.currentUser?.displayName ?? null;
+  }
+
+  get imaAuthNalog(): boolean {
+    return !!this.auth.currentUser;
+  }
+
   jePrijavljen$(): Observable<boolean> {
     return authState(this.auth).pipe(map((u) => !!u));
   }
@@ -76,14 +87,38 @@ export class AuthService {
     await signInWithEmailAndPassword(this.auth, email, lozinka);
   }
 
+  // Vraća true ako Google korisnik već ima profil (i firmu); false ako tek treba da izabere firmu.
+  async prijavaGoogle(): Promise<boolean> {
+    const kredencijal = await signInWithPopup(this.auth, new GoogleAuthProvider());
+    const snap = await getDoc(doc(this.firestore, 'korisnici', kredencijal.user.uid));
+    return snap.exists();
+  }
+
   async odjava(): Promise<void> {
     await signOut(this.auth);
   }
 
   async registruj(p: RegistracijaPodaci): Promise<void> {
     const kredencijal = await createUserWithEmailAndPassword(this.auth, p.email, p.lozinka);
-    const uid = kredencijal.user.uid;
+    await this.napraviProfil(kredencijal.user.uid, p.email, p.ime, p);
+  }
 
+  // Dovršava registraciju za korisnika koji se već prijavio preko Google-a (bira firmu).
+  async dovrsiGoogleProfil(p: RegistracijaPodaci): Promise<void> {
+    const u = this.auth.currentUser;
+    if (!u) {
+      throw new Error('Nema aktivnog Google naloga.');
+    }
+    await this.napraviProfil(u.uid, u.email ?? '', u.displayName ?? p.ime, p);
+  }
+
+  // Zajedničko kreiranje Kompanije (ako je nova) + Korisnik profila — deljeno za email i Google.
+  private async napraviProfil(
+    uid: string,
+    email: string,
+    ime: string,
+    p: RegistracijaPodaci
+  ): Promise<void> {
     let kompanijaId = p.kompanijaId ?? '';
     let uloga: Korisnik['uloga'] = 'laborant';
 
@@ -101,7 +136,7 @@ export class AuthService {
       uloga = 'admin';
     }
 
-    const korisnik: Korisnik = { uid, email: p.email, ime: p.ime, kompanijaId, uloga };
+    const korisnik: Korisnik = { uid, email, ime, kompanijaId, uloga };
     await setDoc(doc(this.firestore, 'korisnici', uid), korisnik);
   }
 

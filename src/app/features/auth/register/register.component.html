@@ -6,26 +6,34 @@
     </div>
     <h1>Registracija</h1>
 
+    <!-- Kad korisnik dolazi preko Google-a, identitet je već poznat. -->
+    <div class="google-info" *ngIf="googleMode">
+      <mat-icon>check_circle</mat-icon>
+      Povezan Google nalog{{ googleIme ? ' — ' + googleIme : '' }}. Izaberi još samo firmu.
+    </div>
+
     <form [formGroup]="forma" (ngSubmit)="registruj()">
-      <mat-form-field appearance="outline">
-        <mat-label>Ime i prezime</mat-label>
-        <input matInput formControlName="ime" />
-        <mat-error *ngIf="forma.get('ime')?.hasError('required')">Obavezno polje.</mat-error>
-      </mat-form-field>
+      <ng-container *ngIf="!googleMode">
+        <mat-form-field appearance="outline">
+          <mat-label>Ime i prezime</mat-label>
+          <input matInput formControlName="ime" />
+          <mat-error *ngIf="forma.get('ime')?.hasError('required')">Obavezno polje.</mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" autocomplete="username" />
-        <mat-error *ngIf="forma.get('email')?.hasError('required')">Email je obavezan.</mat-error>
-        <mat-error *ngIf="forma.get('email')?.hasError('email')">Neispravan email.</mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" autocomplete="username" />
+          <mat-error *ngIf="forma.get('email')?.hasError('required')">Email je obavezan.</mat-error>
+          <mat-error *ngIf="forma.get('email')?.hasError('email')">Neispravan email.</mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Lozinka</mat-label>
-        <input matInput type="password" formControlName="lozinka" autocomplete="new-password" />
-        <mat-error *ngIf="forma.get('lozinka')?.hasError('required')">Lozinka je obavezna.</mat-error>
-        <mat-error *ngIf="forma.get('lozinka')?.hasError('minlength')">Najmanje 6 karaktera.</mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Lozinka</mat-label>
+          <input matInput type="password" formControlName="lozinka" autocomplete="new-password" />
+          <mat-error *ngIf="forma.get('lozinka')?.hasError('required')">Lozinka je obavezna.</mat-error>
+          <mat-error *ngIf="forma.get('lozinka')?.hasError('minlength')">Najmanje 6 karaktera.</mat-error>
+        </mat-form-field>
+      </ng-container>
 
       <label class="grupa-label">Kompanija</label>
       <mat-radio-group formControlName="nacin" class="nacin">
@@ -65,9 +73,17 @@
 
       <button mat-raised-button color="primary" type="submit" [disabled]="slanje">
         <mat-icon>person_add</mat-icon>
-        Registruj se
+        {{ googleMode ? 'Završi registraciju' : 'Registruj se' }}
       </button>
     </form>
+
+    <ng-container *ngIf="!googleMode">
+      <div class="ili"><span>ili</span></div>
+      <button mat-stroked-button class="google-dugme" [disabled]="slanje" (click)="nastaviGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+        Registruj se sa Google
+      </button>
+    </ng-container>
 
     <p class="prebaci">Imaš nalog? <a routerLink="/prijava">Prijavi se</a></p>
   </mat-card>

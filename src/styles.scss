@@ -178,6 +178,39 @@ mat-icon.mini {
     text-align: center;
     color: rgba(0, 0, 0, 0.7);
   }
+
+  // "ili" razdvajač između email forme i Google dugmeta.
+  .ili {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 0.85rem;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+    span {
+      padding: 0 0.75rem;
+    }
+  }
+
+  .google-dugme {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    img {
+      width: 18px;
+      height: 18px;
+    }
+  }
 }
 
 // Prosta tabela unutar detalja (zasejavanja, stavke analize).

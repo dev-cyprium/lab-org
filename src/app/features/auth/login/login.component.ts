@@ -42,4 +42,22 @@ export class LoginComponent {
       this.slanje = false;
     }
   }
+
+  async prijaviGoogle(): Promise<void> {
+    this.slanje = true;
+    try {
+      const imaProfil = await this.auth.prijavaGoogle();
+      if (imaProfil) {
+        this.notifikacija.uspeh('Uspešno ste prijavljeni.');
+        this.router.navigate(['/pocetna']);
+      } else {
+        // Prvi put preko Google-a — nalog postoji, ali treba izabrati firmu.
+        this.notifikacija.uspeh('Nalog povezan. Izaberi firmu da završiš registraciju.');
+        this.router.navigate(['/registracija']);
+      }
+    } catch {
+      this.notifikacija.greska('Google prijava nije uspela.');
+      this.slanje = false;
+    }
+  }
 }

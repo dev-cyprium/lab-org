@@ -29,6 +29,13 @@
       </button>
     </form>
 
+    <div class="ili"><span>ili</span></div>
+
+    <button mat-stroked-button class="google-dugme" [disabled]="slanje" (click)="prijaviGoogle()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+      Nastavi sa Google
+    </button>
+
     <p class="prebaci">
       Nemaš nalog? <a routerLink="/registracija">Registruj se</a>
     </p>
