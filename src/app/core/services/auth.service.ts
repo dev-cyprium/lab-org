@@ -11,12 +11,13 @@ import {
 import {
   Firestore,
   doc,
+  docData,
   getDoc,
   setDoc,
   collection,
   addDoc,
 } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, from, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
 
 import { Korisnik, Kompanija } from '../models';
@@ -47,15 +48,29 @@ export class AuthService {
   private trenutni = new BehaviorSubject<Korisnik | null>(null);
 
   constructor(private auth: Auth, private firestore: Firestore) {
+    // docData je reaktivan i radi unutar Angular zone — UI se osvežava odmah po prijavi
+    // (bez ovoga navbar ostaje na "Prijavi se" do ručnog refresha jer getDoc resolvuje van zone).
     this.korisnik$ = authState(this.auth).pipe(
       switchMap((user) =>
-        user ? this.ucitajProfil(user.uid) : of(null)
+        user
+          ? (docData(doc(this.firestore, 'korisnici', user.uid)) as Observable<Korisnik | undefined>).pipe(
+              map((k) => k ?? null)
+            )
+          : of(null)
       ),
       shareReplay(1)
     );
 
     this.aktivnaKompanija$ = this.korisnik$.pipe(
-      switchMap((k) => (k ? this.ucitajKompaniju(k.kompanijaId) : of(null))),
+      switchMap((k) =>
+        k
+          ? (
+              docData(doc(this.firestore, 'kompanije', k.kompanijaId), { idField: 'id' }) as Observable<
+                Kompanija | undefined
+              >
+            ).pipe(map((c) => c ?? null))
+          : of(null)
+      ),
       shareReplay(1)
     );
 
@@ -138,17 +153,5 @@ export class AuthService {
 
     const korisnik: Korisnik = { uid, email, ime, kompanijaId, uloga };
     await setDoc(doc(this.firestore, 'korisnici', uid), korisnik);
-  }
-
-  private ucitajProfil(uid: string): Observable<Korisnik | null> {
-    return from(getDoc(doc(this.firestore, 'korisnici', uid))).pipe(
-      map((snap) => (snap.exists() ? (snap.data() as Korisnik) : null))
-    );
-  }
-
-  private ucitajKompaniju(id: string): Observable<Kompanija | null> {
-    return from(getDoc(doc(this.firestore, 'kompanije', id))).pipe(
-      map((snap) => (snap.exists() ? ({ id: snap.id, ...snap.data() } as Kompanija) : null))
-    );
   }
 }
