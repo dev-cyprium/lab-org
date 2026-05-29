@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Firestore } from '@angular/fire/firestore';
 
 import { Analiza } from '../models';
-import { JsonKolekcijaServis } from './json-kolekcija.servis';
+import { FirestoreCrudServis } from './firestore-crud.servis';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
-export class AnalizeService extends JsonKolekcijaServis<Analiza> {
-  protected putanja = 'assets/data/analize.json';
+export class AnalizeService extends FirestoreCrudServis<Analiza> {
+  protected putanja = 'analize';
 
-  constructor(http: HttpClient) {
-    super(http);
+  constructor(firestore: Firestore, auth: AuthService) {
+    super(firestore, auth);
   }
 }
