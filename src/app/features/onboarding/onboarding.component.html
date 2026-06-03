@@ -1,0 +1,69 @@
+<section class="onboarding">
+  <header class="zaglavlje">
+    <mat-icon>waving_hand</mat-icon>
+    <h1>Dobrodošli u LabOrg</h1>
+    <p>Tvoja firma još nema nijednu laboratoriju. Kreiraj prvu da počneš sa radom.</p>
+  </header>
+
+  <div class="opcije">
+    <mat-card class="opcija">
+      <mat-card-header>
+        <mat-card-title>Kreiraj prvu laboratoriju</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="forma" (ngSubmit)="kreirajLaboratoriju()">
+          <mat-form-field appearance="outline">
+            <mat-label>Naziv</mat-label>
+            <input matInput appAutoFocus formControlName="naziv" />
+            <mat-error *ngIf="forma.get('naziv')?.hasError('required')">Obavezno polje.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tip</mat-label>
+            <mat-select formControlName="tip">
+              <mat-option *ngFor="let t of tipovi" [value]="t">{{ t }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Lokacija</mat-label>
+            <input matInput formControlName="lokacija" />
+            <mat-error *ngIf="forma.get('lokacija')?.hasError('required')">Obavezno polje.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Kontakt</mat-label>
+            <input matInput formControlName="kontakt" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Opis</mat-label>
+            <textarea matInput rows="2" formControlName="opis"></textarea>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="slanje">
+            <mat-icon>add</mat-icon>
+            Kreiraj laboratoriju
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Uvoz demo podataka je dostupan samo administratoru firme. -->
+    <mat-card class="opcija demo" *ngIf="jeAdmin">
+      <mat-card-header>
+        <mat-card-title>Ili uvezi demo podatke</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          Popuni firmu primerom kompletne laboratorije — laboratorije, zaposleni, podloge, uzorci,
+          zasejavanja i analize. Zgodno za brzo isprobavanje aplikacije.
+        </p>
+        <button mat-stroked-button color="primary" [disabled]="slanje" (click)="uveziDemo()">
+          <mat-icon>cloud_download</mat-icon>
+          Uvezi demo podatke
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

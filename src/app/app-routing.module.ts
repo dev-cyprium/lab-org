@@ -18,6 +18,12 @@ const routes: Routes = [
       import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
   {
+    path: 'dobrodosli',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./features/onboarding/onboarding.module').then((m) => m.OnboardingModule),
+  },
+  {
     path: 'mikroorganizmi',
     canActivate: [authGuard],
     loadChildren: () =>

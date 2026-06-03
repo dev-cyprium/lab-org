@@ -1,0 +1,43 @@
+.onboarding {
+  max-width: 900px;
+  margin: 0 auto;
+
+  .zaglavlje {
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    mat-icon {
+      font-size: 3rem;
+      width: 3rem;
+      height: 3rem;
+      color: var(--laborg-primary, #00796b);
+    }
+
+    h1 {
+      margin: 0.5rem 0 0.25rem;
+    }
+
+    p {
+      margin: 0;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+.opcije {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .demo p {
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 1rem;
+  }
+}
