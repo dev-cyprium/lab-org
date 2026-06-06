@@ -213,6 +213,34 @@ mat-icon.mini {
   }
 }
 
+// Forme za unos/izmenu entiteta.
+.forma {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .red-polja {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0 1rem;
+  }
+
+  .akcije {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+}
+
+// Dugmad iznad liste / u detalju (Novo, Izmeni, Obriši).
+.traka-akcija {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 // Prosta tabela unutar detalja (zasejavanja, stavke analize).
 .tabelica {
   width: 100%;

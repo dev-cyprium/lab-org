@@ -10,6 +10,16 @@
 
   <ng-container *ngIf="!ucitavanje">
     <mat-card *ngIf="laboratorija as lab; else nemaGa" class="kartica-detalj">
+      <div class="traka-akcija">
+        <a mat-stroked-button color="primary" [routerLink]="['/laboratorije', lab.id, 'izmena']">
+          <mat-icon>edit</mat-icon>
+          Izmeni
+        </a>
+        <button mat-stroked-button color="warn" (click)="obrisi()">
+          <mat-icon>delete</mat-icon>
+          Obriši
+        </button>
+      </div>
       <mat-card-header>
         <mat-card-title>{{ lab.naziv }}</mat-card-title>
         <mat-card-subtitle>{{ lab.tip }}</mat-card-subtitle>

@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from './material.module';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 import { OcenaPipe } from './pipes/ocena.pipe';
 import { CfuPipe } from './pipes/cfu.pipe';
@@ -21,7 +22,7 @@ const DIREKTIVE = [HighlightOpasnoDirective, AutoFocusDirective];
 
 // Sve što se deli između feature modula ide ovde (Material, forme, pipe-ovi, direktive).
 @NgModule({
-  declarations: [PageNotFoundComponent, ...PIPES, ...DIREKTIVE],
+  declarations: [PageNotFoundComponent, ConfirmDialogComponent, ...PIPES, ...DIREKTIVE],
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, MaterialModule],
   exports: [
     CommonModule,
@@ -29,6 +30,7 @@ const DIREKTIVE = [HighlightOpasnoDirective, AutoFocusDirective];
     ReactiveFormsModule,
     MaterialModule,
     PageNotFoundComponent,
+    ConfirmDialogComponent,
     ...PIPES,
     ...DIREKTIVE,
   ],
