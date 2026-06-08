@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 
 import { Zaposleni, Laboratorija } from '../../../core/models';
 import { ZaposleniService } from '../../../core/services/zaposleni.service';
 import { LaboratorijeService } from '../../../core/services/laboratorije.service';
+import { NotifikacijaService } from '../../../core/services/notifikacija.service';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-zaposleni-detail',
@@ -18,8 +21,11 @@ export class ZaposleniDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
+    private dialog: MatDialog,
     private zaposleniServis: ZaposleniService,
-    private laboratorijeServis: LaboratorijeService
+    private laboratorijeServis: LaboratorijeService,
+    private notifikacija: NotifikacijaService
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +39,30 @@ export class ZaposleniDetailComponent implements OnInit {
         this.laboratorija = labovi.find((l) => l.id === z.laboratorijaId);
       }
       this.ucitavanje = false;
+    });
+  }
+
+  obrisi(): void {
+    if (!this.zaposleni) {
+      return;
+    }
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        naslov: 'Brisanje zaposlenog',
+        poruka: `Da li sigurno želiš da obrišeš „${this.zaposleni.ime} ${this.zaposleni.prezime}“?`,
+      },
+    });
+    ref.afterClosed().subscribe(async (potvrda) => {
+      if (!potvrda || !this.zaposleni) {
+        return;
+      }
+      try {
+        await this.zaposleniServis.obrisi(this.zaposleni.id);
+        this.notifikacija.uspeh('Zaposleni je obrisan.');
+        this.router.navigate(['/zaposleni']);
+      } catch {
+        this.notifikacija.greska('Brisanje nije uspelo.');
+      }
     });
   }
 }

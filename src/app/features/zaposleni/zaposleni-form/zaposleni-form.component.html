@@ -1,0 +1,83 @@
+<section class="detalj">
+  <a mat-button routerLink="/zaposleni">
+    <mat-icon>arrow_back</mat-icon>
+    Nazad
+  </a>
+
+  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <mat-card class="kartica-detalj" *ngIf="!ucitavanje">
+    <mat-card-header>
+      <mat-card-title>{{ uredjivanje ? 'Izmena zaposlenog' : 'Novi zaposleni' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="forma" (ngSubmit)="sacuvaj()" class="forma">
+        <div class="red-polja">
+          <mat-form-field appearance="outline">
+            <mat-label>Ime</mat-label>
+            <input matInput appAutoFocus formControlName="ime" />
+            <mat-error *ngIf="forma.get('ime')?.hasError('required')">Obavezno polje.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Prezime</mat-label>
+            <input matInput formControlName="prezime" />
+            <mat-error *ngIf="forma.get('prezime')?.hasError('required')">Obavezno polje.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Pozicija</mat-label>
+          <mat-select formControlName="pozicija">
+            <mat-option *ngFor="let p of pozicije" [value]="p">{{ p }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="red-polja">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            <mat-error *ngIf="forma.get('email')?.hasError('required')">Email je obavezan.</mat-error>
+            <mat-error *ngIf="forma.get('email')?.hasError('email')">Neispravan email.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Telefon</mat-label>
+            <input matInput formControlName="telefon" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Stručna sprema</mat-label>
+          <input matInput formControlName="strucnaSprema" />
+        </mat-form-field>
+
+        <div class="red-polja">
+          <mat-form-field appearance="outline">
+            <mat-label>Laboratorija</mat-label>
+            <mat-select formControlName="laboratorijaId">
+              <mat-option *ngFor="let l of laboratorije" [value]="l.id">{{ l.naziv }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="forma.get('laboratorijaId')?.hasError('required')">Izaberi laboratoriju.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Datum zaposlenja</mat-label>
+            <input matInput type="date" formControlName="datumZaposlenja" />
+            <mat-error *ngIf="forma.get('datumZaposlenja')?.hasError('required')">Obavezno polje.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-checkbox formControlName="aktivan">Aktivan</mat-checkbox>
+
+        <div class="akcije">
+          <button mat-raised-button color="primary" type="submit" [disabled]="slanje">
+            <mat-icon>save</mat-icon>
+            Sačuvaj
+          </button>
+          <a mat-button routerLink="/zaposleni">Odustani</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</section>
