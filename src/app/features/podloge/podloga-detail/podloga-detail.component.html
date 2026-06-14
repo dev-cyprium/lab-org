@@ -8,6 +8,16 @@
 
   <ng-container *ngIf="!ucitavanje">
     <mat-card *ngIf="podloga as p; else nemaGa" class="kartica-detalj" [appHighlightOpasno]="p.klasaOpasnosti">
+      <div class="traka-akcija">
+        <a mat-stroked-button color="primary" [routerLink]="['/podloge', p.id, 'izmena']">
+          <mat-icon>edit</mat-icon>
+          Izmeni
+        </a>
+        <button mat-stroked-button color="warn" (click)="obrisi()">
+          <mat-icon>delete</mat-icon>
+          Obriši
+        </button>
+      </div>
       <mat-card-header>
         <mat-icon mat-card-avatar>{{ p.klasaOpasnosti | klasaOpasnosti: 'ikonica' }}</mat-icon>
         <mat-card-title>{{ p.naziv }}</mat-card-title>
