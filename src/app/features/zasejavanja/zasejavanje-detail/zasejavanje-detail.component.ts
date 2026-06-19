@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 
 import { Zasejavanje, Uzorak, Podloga, Mikroorganizam } from '../../../core/models';
@@ -7,6 +8,8 @@ import { ZasejavanjaService } from '../../../core/services/zasejavanja.service';
 import { UzorciService } from '../../../core/services/uzorci.service';
 import { PodlogeService } from '../../../core/services/podloge.service';
 import { MikroorganizmiService } from '../../../core/services/mikroorganizmi.service';
+import { NotifikacijaService } from '../../../core/services/notifikacija.service';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-zasejavanje-detail',
@@ -22,10 +25,13 @@ export class ZasejavanjeDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
+    private dialog: MatDialog,
     private zasejavanjaServis: ZasejavanjaService,
     private uzorciServis: UzorciService,
     private podlogeServis: PodlogeService,
-    private mikroorganizmiServis: MikroorganizmiService
+    private mikroorganizmiServis: MikroorganizmiService,
+    private notifikacija: NotifikacijaService
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +50,30 @@ export class ZasejavanjeDetailComponent implements OnInit {
         this.mikroorganizam = r.mikroorganizmi.find((m) => m.id === z.mikroorganizamId);
       }
       this.ucitavanje = false;
+    });
+  }
+
+  obrisi(): void {
+    if (!this.zasejavanje) {
+      return;
+    }
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        naslov: 'Brisanje zasejavanja',
+        poruka: `Da li sigurno želiš da obrišeš zasejavanje „${this.zasejavanje.oznaka}“?`,
+      },
+    });
+    ref.afterClosed().subscribe(async (potvrda) => {
+      if (!potvrda || !this.zasejavanje) {
+        return;
+      }
+      try {
+        await this.zasejavanjaServis.obrisi(this.zasejavanje.id);
+        this.notifikacija.uspeh('Zasejavanje je obrisano.');
+        this.router.navigate(['/zasejavanja']);
+      } catch {
+        this.notifikacija.greska('Brisanje nije uspelo.');
+      }
     });
   }
 }

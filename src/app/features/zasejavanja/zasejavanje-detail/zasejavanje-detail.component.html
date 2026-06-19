@@ -8,6 +8,16 @@
 
   <ng-container *ngIf="!ucitavanje">
     <mat-card *ngIf="zasejavanje as z; else nemaGa" class="kartica-detalj">
+      <div class="traka-akcija">
+        <a mat-stroked-button color="primary" [routerLink]="['/zasejavanja', z.id, 'izmena']">
+          <mat-icon>edit</mat-icon>
+          Izmeni
+        </a>
+        <button mat-stroked-button color="warn" (click)="obrisi()">
+          <mat-icon>delete</mat-icon>
+          Obriši
+        </button>
+      </div>
       <mat-card-header>
         <mat-icon mat-card-avatar>grain</mat-icon>
         <mat-card-title>{{ z.oznaka }}</mat-card-title>
