@@ -1,0 +1,34 @@
+.stavke {
+  margin: 0.5rem 0 1rem;
+
+  .stavke-zaglavlje {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+  }
+
+  .stavka {
+    padding: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+
+    .red-polja {
+      align-items: center;
+    }
+  }
+}
+
+.napomena {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
+}

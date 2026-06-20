@@ -8,6 +8,16 @@
 
   <ng-container *ngIf="!ucitavanje">
     <mat-card *ngIf="analiza as a; else nemaGa" class="kartica-detalj">
+      <div class="traka-akcija">
+        <a mat-stroked-button color="primary" [routerLink]="['/analize', a.id, 'izmena']">
+          <mat-icon>edit</mat-icon>
+          Izmeni
+        </a>
+        <button mat-stroked-button color="warn" (click)="obrisi()">
+          <mat-icon>delete</mat-icon>
+          Obriši
+        </button>
+      </div>
       <mat-card-header>
         <mat-card-title>{{ a.sifra }}</mat-card-title>
         <mat-card-subtitle>{{ a.tip }} · {{ a.datumAnalize | datumSr }}</mat-card-subtitle>
