@@ -1,18 +1,58 @@
-rules_version='2'
+rules_version = '2';
 
+// Multi-tenant pravila: svaki korisnik pripada jednoj kompaniji i vidi samo njene podatke.
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      // This rule allows anyone with your database reference to view, edit,
-      // and delete all data in your database. It is useful for getting
-      // started, but it is configured to expire after 30 days because it
-      // leaves your app open to attackers. At that time, all client
-      // requests to your database will be denied.
-      //
-      // Make sure to write security rules for your app before that time, or
-      // else all client requests to your database will be denied until you
-      // update your rules.
-      allow read, write: if request.time < timestamp.date(2026, 7, 31);
+
+    function prijavljen() {
+      return request.auth != null;
+    }
+
+    // kompanijaId prijavljenog korisnika (čita se iz njegovog profila).
+    function mojaKompanija() {
+      return get(/databases/$(database)/documents/korisnici/$(request.auth.uid)).data.kompanijaId;
+    }
+
+    // Da li podaci pripadaju kompaniji prijavljenog korisnika.
+    function istaKompanija(podaci) {
+      return prijavljen() && podaci.kompanijaId == mojaKompanija();
+    }
+
+    // Profil korisnika — svako vidi i menja samo svoj.
+    match /korisnici/{uid} {
+      allow read, create, update: if prijavljen() && request.auth.uid == uid;
+    }
+
+    // Kompanije (tenanti) — spisak je čitljiv (za registraciju), izmene samo za svoju firmu.
+    match /kompanije/{id} {
+      allow read, create: if prijavljen();
+      allow update, delete: if prijavljen() && mojaKompanija() == id;
+    }
+
+    // Tenant kolekcije — pristup isključivo podacima svoje kompanije.
+    match /laboratorije/{id} {
+      allow read, update, delete: if istaKompanija(resource.data);
+      allow create: if istaKompanija(request.resource.data);
+    }
+    match /zaposleni/{id} {
+      allow read, update, delete: if istaKompanija(resource.data);
+      allow create: if istaKompanija(request.resource.data);
+    }
+    match /podloge/{id} {
+      allow read, update, delete: if istaKompanija(resource.data);
+      allow create: if istaKompanija(request.resource.data);
+    }
+    match /uzorci/{id} {
+      allow read, update, delete: if istaKompanija(resource.data);
+      allow create: if istaKompanija(request.resource.data);
+    }
+    match /zasejavanja/{id} {
+      allow read, update, delete: if istaKompanija(resource.data);
+      allow create: if istaKompanija(request.resource.data);
+    }
+    match /analize/{id} {
+      allow read, update, delete: if istaKompanija(resource.data);
+      allow create: if istaKompanija(request.resource.data);
     }
   }
 }

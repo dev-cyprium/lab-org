@@ -38,6 +38,18 @@ body {
   background: #f5f5f5;
 }
 
+// Boje za notifikacije (snackbar) — zeleno za uspeh, crveno za grešku.
+.snack-uspeh {
+  --mdc-snackbar-container-color: #2e7d32;
+  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snack-bar-button-color: #fff;
+}
+.snack-greska {
+  --mdc-snackbar-container-color: #c62828;
+  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snack-bar-button-color: #fff;
+}
+
 // Zajedničke pomoćne klase koje se ponavljaju kroz feature ekrane.
 .zaglavlje {
   margin-bottom: 1rem;
