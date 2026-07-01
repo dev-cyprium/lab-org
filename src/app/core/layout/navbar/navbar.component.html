@@ -16,11 +16,27 @@
   <span class="razmak"></span>
 
   <ng-container *ngIf="korisnik$ | async as korisnik; else nijePrijavljen">
-    <!-- Prikaz aktivne kompanije (tenant). -->
-    <span class="kompanija" *ngIf="kompanija$ | async as kompanija">
-      <mat-icon class="mini">apartment</mat-icon>
-      {{ kompanija.naziv }}
-    </span>
+    <!-- Prebacivanje između firmi (tenant switcher). -->
+    <button mat-button class="org-dugme" [matMenuTriggerFor]="orgMeni">
+      <mat-icon>apartment</mat-icon>
+      <span class="org-naziv">{{ (aktivnaKompanija$ | async)?.naziv || 'Firma' }}</span>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #orgMeni="matMenu">
+      <button
+        mat-menu-item
+        *ngFor="let k of mojeKompanije$ | async"
+        (click)="promeni(k.id)"
+      >
+        <mat-icon>{{ k.id === (aktivnaKompanija$ | async)?.id ? 'check' : 'business' }}</mat-icon>
+        <span>{{ k.naziv }}</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="otvoriDijalog()">
+        <mat-icon>add_business</mat-icon>
+        <span>Nova / pridruži se firmi</span>
+      </button>
+    </mat-menu>
 
     <button mat-button [matMenuTriggerFor]="korisnikMeni">
       <mat-icon>account_circle</mat-icon>
@@ -30,7 +46,6 @@
       <div class="meni-zaglavlje">
         <strong>{{ korisnik.ime }}</strong>
         <small>{{ korisnik.email }}</small>
-        <small class="uloga">{{ korisnik.uloga }}</small>
       </div>
       <button mat-menu-item (click)="odjava()">
         <mat-icon>logout</mat-icon>

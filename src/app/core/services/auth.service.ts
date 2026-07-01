@@ -14,42 +14,43 @@ import {
   docData,
   getDoc,
   setDoc,
+  updateDoc,
   collection,
   addDoc,
 } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
 
-import { Korisnik, Kompanija } from '../models';
+import { Korisnik, Kompanija, Clanstvo, Uloga } from '../models';
+import { KompanijeService } from './kompanije.service';
 
 // Podaci sa forme za registraciju.
 export interface RegistracijaPodaci {
   email: string;
   lozinka: string;
   ime: string;
-  nacin: 'nova' | 'postojeca'; // nova kompanija ili pridruživanje postojećoj
-  // za novu kompaniju:
+  nacin: 'nova' | 'postojeca';
   nazivKompanije?: string;
   pib?: string;
   adresa?: string;
   kontakt?: string;
-  // za pridruživanje:
   kompanijaId?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // Profil prijavljenog korisnika (null ako niko nije prijavljen).
   korisnik$: Observable<Korisnik | null>;
-  // Kompanija (tenant) kojoj korisnik pripada.
   aktivnaKompanija$: Observable<Kompanija | null>;
+  // Sve firme kojima korisnik pripada (za prebacivanje u navbaru).
+  mojeKompanije$: Observable<Kompanija[]>;
 
-  // Sinhrona kopija za servise koji grade upite (kompanijaId).
   private trenutni = new BehaviorSubject<Korisnik | null>(null);
 
-  constructor(private auth: Auth, private firestore: Firestore) {
-    // docData je reaktivan i radi unutar Angular zone — UI se osvežava odmah po prijavi
-    // (bez ovoga navbar ostaje na "Prijavi se" do ručnog refresha jer getDoc resolvuje van zone).
+  constructor(
+    private auth: Auth,
+    private firestore: Firestore,
+    private kompanijeServis: KompanijeService
+  ) {
     this.korisnik$ = authState(this.auth).pipe(
       switchMap((user) =>
         user
@@ -62,30 +63,62 @@ export class AuthService {
     );
 
     this.aktivnaKompanija$ = this.korisnik$.pipe(
-      switchMap((k) =>
-        k
+      switchMap((k) => {
+        const id = AuthService.aktivnaId(k);
+        return id
           ? (
-              docData(doc(this.firestore, 'kompanije', k.kompanijaId), { idField: 'id' }) as Observable<
+              docData(doc(this.firestore, 'kompanije', id), { idField: 'id' }) as Observable<
                 Kompanija | undefined
               >
             ).pipe(map((c) => c ?? null))
-          : of(null)
-      ),
+          : of(null);
+      }),
+      shareReplay(1)
+    );
+
+    this.mojeKompanije$ = combineLatest([this.korisnik$, this.kompanijeServis.ucitajSve()]).pipe(
+      map(([k, sve]) => {
+        const ids = AuthService.kompanijeIdsOd(k);
+        return sve.filter((c) => ids.includes(c.id));
+      }),
       shareReplay(1)
     );
 
     this.korisnik$.subscribe((k) => this.trenutni.next(k));
   }
 
+  // ————— pomoćne (rade i sa starim i sa novim formatom profila) —————
+
+  private static aktivnaId(k: Korisnik | null): string | null {
+    if (!k) return null;
+    return k.aktivnaKompanijaId || k.kompanijaId || k.clanstva?.[0]?.kompanijaId || null;
+  }
+
+  private static clanstvaOd(k: Korisnik | null): Clanstvo[] {
+    if (!k) return [];
+    if (k.clanstva?.length) return k.clanstva;
+    if (k.kompanijaId) return [{ kompanijaId: k.kompanijaId, uloga: k.uloga ?? 'laborant' }];
+    return [];
+  }
+
+  private static kompanijeIdsOd(k: Korisnik | null): string[] {
+    return AuthService.clanstvaOd(k).map((c) => c.kompanijaId);
+  }
+
   get kompanijaId(): string | null {
-    return this.trenutni.value?.kompanijaId ?? null;
+    return AuthService.aktivnaId(this.trenutni.value);
   }
 
   get jeAdmin(): boolean {
-    return this.trenutni.value?.uloga === 'admin';
+    const k = this.trenutni.value;
+    const akt = AuthService.aktivnaId(k);
+    return AuthService.clanstvaOd(k).find((c) => c.kompanijaId === akt)?.uloga === 'admin';
   }
 
-  // Podaci sa Google naloga (kad korisnik tek treba da izabere firmu).
+  get mojiKompanijeIds(): string[] {
+    return AuthService.kompanijeIdsOd(this.trenutni.value);
+  }
+
   get googleIme(): string | null {
     return this.auth.currentUser?.displayName ?? null;
   }
@@ -98,11 +131,14 @@ export class AuthService {
     return authState(this.auth).pipe(map((u) => !!u));
   }
 
+  aktivnaKompanijaId$(): Observable<string | null> {
+    return this.korisnik$.pipe(map((k) => AuthService.aktivnaId(k)));
+  }
+
   async prijava(email: string, lozinka: string): Promise<void> {
     await signInWithEmailAndPassword(this.auth, email, lozinka);
   }
 
-  // Vraća true ako Google korisnik već ima profil (i firmu); false ako tek treba da izabere firmu.
   async prijavaGoogle(): Promise<boolean> {
     const kredencijal = await signInWithPopup(this.auth, new GoogleAuthProvider());
     const snap = await getDoc(doc(this.firestore, 'korisnici', kredencijal.user.uid));
@@ -118,7 +154,6 @@ export class AuthService {
     await this.napraviProfil(kredencijal.user.uid, p.email, p.ime, p);
   }
 
-  // Dovršava registraciju za korisnika koji se već prijavio preko Google-a (bira firmu).
   async dovrsiGoogleProfil(p: RegistracijaPodaci): Promise<void> {
     const u = this.auth.currentUser;
     if (!u) {
@@ -127,7 +162,54 @@ export class AuthService {
     await this.napraviProfil(u.uid, u.email ?? '', u.displayName ?? p.ime, p);
   }
 
-  // Zajedničko kreiranje Kompanije (ako je nova) + Korisnik profila — deljeno za email i Google.
+  // ————— prebacivanje / kreiranje / pridruživanje firmama —————
+
+  async promeniKompaniju(kompanijaId: string): Promise<void> {
+    const uid = this.auth.currentUser?.uid;
+    if (!uid) return;
+    await updateDoc(doc(this.firestore, 'korisnici', uid), { aktivnaKompanijaId: kompanijaId });
+  }
+
+  // Napravi novu firmu, postani njen admin i pređi na nju.
+  async napraviKompaniju(podaci: {
+    naziv: string;
+    pib?: string;
+    adresa?: string;
+    kontakt?: string;
+  }): Promise<void> {
+    const uid = this.auth.currentUser?.uid;
+    if (!uid) return;
+    const ref = await addDoc(collection(this.firestore, 'kompanije'), {
+      naziv: podaci.naziv,
+      pib: podaci.pib ?? '',
+      adresa: podaci.adresa ?? '',
+      kontakt: podaci.kontakt ?? '',
+      datumRegistracije: new Date().toISOString(),
+      aktivan: true,
+    });
+    await this.dodajClanstvo(ref.id, 'admin');
+  }
+
+  // Pridruži se postojećoj firmi (kao laborant).
+  async pridruziSe(kompanijaId: string): Promise<void> {
+    await this.dodajClanstvo(kompanijaId, 'laborant');
+  }
+
+  private async dodajClanstvo(kompanijaId: string, uloga: Uloga): Promise<void> {
+    const uid = this.auth.currentUser?.uid;
+    if (!uid) return;
+    const k = this.trenutni.value;
+    const clanstva = AuthService.clanstvaOd(k);
+    if (!clanstva.some((c) => c.kompanijaId === kompanijaId)) {
+      clanstva.push({ kompanijaId, uloga });
+    }
+    await updateDoc(doc(this.firestore, 'korisnici', uid), {
+      clanstva,
+      kompanijeIds: clanstva.map((c) => c.kompanijaId),
+      aktivnaKompanijaId: kompanijaId,
+    });
+  }
+
   private async napraviProfil(
     uid: string,
     email: string,
@@ -135,9 +217,8 @@ export class AuthService {
     p: RegistracijaPodaci
   ): Promise<void> {
     let kompanijaId = p.kompanijaId ?? '';
-    let uloga: Korisnik['uloga'] = 'laborant';
+    let uloga: Uloga = 'laborant';
 
-    // Nova firma → kreira se Kompanija dokument, a korisnik postaje admin.
     if (p.nacin === 'nova') {
       const ref = await addDoc(collection(this.firestore, 'kompanije'), {
         naziv: p.nazivKompanije,
@@ -151,7 +232,14 @@ export class AuthService {
       uloga = 'admin';
     }
 
-    const korisnik: Korisnik = { uid, email, ime, kompanijaId, uloga };
+    const korisnik: Korisnik = {
+      uid,
+      email,
+      ime,
+      clanstva: [{ kompanijaId, uloga }],
+      kompanijeIds: [kompanijaId],
+      aktivnaKompanijaId: kompanijaId,
+    };
     await setDoc(doc(this.firestore, 'korisnici', uid), korisnik);
   }
 }

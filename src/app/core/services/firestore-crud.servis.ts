@@ -13,7 +13,6 @@ import {
 import { Observable } from 'rxjs';
 import { filter, switchMap, take } from 'rxjs/operators';
 
-import { Korisnik } from '../models';
 import { AuthService } from './auth.service';
 
 // Generička CRUD osnova nad Firestore-om, filtrirana po kompaniji (tenant).
@@ -25,13 +24,13 @@ export abstract class FirestoreCrudServis<T extends { id: string; kompanijaId: s
   constructor(protected firestore: Firestore, protected auth: AuthService) {}
 
   ucitajSve(): Observable<T[]> {
-    return this.auth.korisnik$.pipe(
-      filter((k): k is Korisnik => !!k),
+    return this.auth.aktivnaKompanijaId$().pipe(
+      filter((id): id is string => !!id),
       take(1),
-      switchMap((k) => {
+      switchMap((kompanijaId) => {
         const ref = query(
           collection(this.firestore, this.putanja),
-          where('kompanijaId', '==', k.kompanijaId)
+          where('kompanijaId', '==', kompanijaId)
         );
         return (collectionData(ref, { idField: 'id' }) as Observable<T[]>).pipe(take(1));
       })
