@@ -319,3 +319,68 @@ mat-icon.mini {
   color: #1565c0;
 }
 
+/* ————— Poliranje izgleda ————— */
+
+// Ikonice u avatarima kartica su bile isečene — centriramo ih u krug.
+[mat-card-avatar] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: visible;
+  background: rgba(0, 121, 107, 0.1);
+  color: var(--laborg-primary, #00796b);
+
+  &.mat-icon {
+    font-size: 24px;
+    line-height: 24px;
+  }
+}
+
+// Akcije (Izmeni/Obriši) u detaljima — da ne budu zalepljene za vrh kartice.
+.kartica-detalj {
+  border-top: 3px solid var(--laborg-primary, #00796b);
+
+  .traka-akcija {
+    padding: 0.25rem 0 0.9rem;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+}
+
+// Akcenat pored naslova sekcije (ubija sterilnost).
+.zaglavlje h1 {
+  position: relative;
+  padding-left: 0.9rem;
+}
+.zaglavlje h1::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 5px;
+  border-radius: 3px;
+  background: linear-gradient(var(--laborg-primary, #00796b), var(--laborg-accent, #7cb342));
+}
+
+// Tabele — tonirano zaglavlje umesto potpuno belog.
+.tabela th.mat-mdc-header-cell {
+  background: #f2f6f5;
+  color: #37474f;
+  font-weight: 600;
+}
+
+// Kartice malo mekše i sa jačim hover-om.
+mat-card {
+  border-radius: 12px !important;
+}
+
+// Dugmad u traci akcija — malo razmaka i poravnanje.
+.traka-akcija {
+  align-items: center;
+}
+
+

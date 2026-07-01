@@ -1,16 +1,19 @@
 :host {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .ljuska {
   flex: 1 1 auto;
+  min-height: 0; // da flex dete može da se skuplja i skroluje
+  background: #eef1f4;
 }
 
 .bocna-strana {
   width: 250px;
   border-right: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
 }
 
 .sadrzaj {
@@ -20,6 +23,10 @@
 }
 
 .glavni {
-  flex: 1 1 auto;
-  padding: 1.5rem;
+  flex: 1 1 auto; // gura footer na dno kad je sadržaja malo
+  padding: 1.75rem 2rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
 }

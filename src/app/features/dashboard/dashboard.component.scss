@@ -25,14 +25,33 @@
 }
 
 .stat {
+  --c: #00897b;
   text-align: center;
   padding: 1rem 0.5rem;
+  border-top: 3px solid var(--c);
 
   mat-icon {
     font-size: 2rem;
     width: 2rem;
     height: 2rem;
-    color: var(--laborg-primary, #00796b);
+    color: var(--c);
+  }
+
+  // Različita boja po kartici da dashboard ne bude jednoličan.
+  &:nth-child(1) {
+    --c: #00897b;
+  }
+  &:nth-child(2) {
+    --c: #3949ab;
+  }
+  &:nth-child(3) {
+    --c: #00acc1;
+  }
+  &:nth-child(4) {
+    --c: #c62828;
+  }
+  &:nth-child(5) {
+    --c: #f9a825;
   }
 
   .broj {
