@@ -10,8 +10,8 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { filter, switchMap, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 
@@ -33,6 +33,11 @@ export abstract class FirestoreCrudServis<T extends { id: string; kompanijaId: s
           where('kompanijaId', '==', kompanijaId)
         );
         return (collectionData(ref, { idField: 'id' }) as Observable<T[]>).pipe(take(1));
+      }),
+      // Da greška (npr. odbijeno pravilima) ne ostavi spinner da se vrti unedogled.
+      catchError((greska) => {
+        console.error(`Greška pri učitavanju "${this.putanja}":`, greska);
+        return of([] as T[]);
       })
     );
   }
@@ -40,7 +45,13 @@ export abstract class FirestoreCrudServis<T extends { id: string; kompanijaId: s
   ucitajJedan(id: string): Observable<T | undefined> {
     return (
       docData(doc(this.firestore, this.putanja, id), { idField: 'id' }) as Observable<T | undefined>
-    ).pipe(take(1));
+    ).pipe(
+      take(1),
+      catchError((greska) => {
+        console.error(`Greška pri učitavanju "${this.putanja}/${id}":`, greska);
+        return of(undefined);
+      })
+    );
   }
 
   // kompanijaId se uvek postavlja iz aktivne kompanije — forma ga ne šalje.
