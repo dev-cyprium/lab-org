@@ -15,7 +15,7 @@
 }
 
 .bocna-strana {
-  width: 250px;
+  width: 264px;
   border-right: 1px solid var(--laborg-border);
   background: var(--laborg-surface);
 }
@@ -33,4 +33,14 @@
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .bocna-strana {
+    width: min(320px, calc(100vw - 48px));
+  }
+
+  .glavni {
+    padding: 1.25rem 1rem;
+  }
 }

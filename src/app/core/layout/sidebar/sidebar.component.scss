@@ -1,5 +1,101 @@
+.sidebar-ljuska {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--laborg-surface);
+}
+
+.sidebar-brend {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  height: 64px;
+  padding: 0 1.25rem;
+  color: var(--laborg-navy);
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-bottom: 1px solid var(--laborg-border);
+
+  mat-icon {
+    color: var(--laborg-primary);
+  }
+}
+
+.firma {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 1rem 0.75rem 0.5rem;
+  padding: 0.7rem;
+  color: var(--laborg-text);
+  text-align: left;
+  background: var(--laborg-surface-tinted);
+  border: 1px solid var(--laborg-border);
+  border-radius: var(--laborg-radius-md);
+  cursor: pointer;
+  transition: border-color var(--laborg-transition), box-shadow var(--laborg-transition);
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--laborg-primary);
+    box-shadow: var(--laborg-focus);
+  }
+}
+
+.firma-ikona,
+.avatar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--laborg-primary-dark);
+  background: var(--laborg-primary-soft);
+  border-radius: 10px;
+}
+
+.firma-tekst,
+.korisnik-tekst {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+
+  strong,
+  small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  small {
+    color: var(--laborg-text-muted);
+    font-size: 0.68rem;
+  }
+}
+
 .bocni-meni {
-  padding-top: 0.5rem;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0.25rem 0.5rem 1rem;
+
+  .meni-grupa + .meni-grupa {
+    margin-top: 0.65rem;
+  }
+
+  .grupa-naziv {
+    padding: 0.7rem 0.75rem 0.25rem;
+    color: var(--laborg-text-soft);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  a[mat-list-item] {
+    border-radius: var(--laborg-radius-sm);
+  }
 
   .aktivna {
     background: var(--laborg-primary-soft);
@@ -10,5 +106,18 @@
       color: var(--laborg-primary-dark);
       font-weight: 600;
     }
+  }
+}
+
+.korisnik {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 0.75rem;
+  border-top: 1px solid var(--laborg-border);
+
+  .avatar {
+    font-weight: 700;
+    border-radius: 50%;
   }
 }

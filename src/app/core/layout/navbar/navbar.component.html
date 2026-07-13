@@ -8,64 +8,34 @@
     <mat-icon>menu</mat-icon>
   </button>
 
-  <a routerLink="/pocetna" class="brend">
+  <a routerLink="/pocetna" class="brend" *ngIf="!(korisnik$ | async)">
     <mat-icon>biotech</mat-icon>
     <span>LabOrg</span>
   </a>
 
+  <div class="kontekst" *ngIf="korisnik$ | async">
+    <span class="putanja">Laboratorija</span>
+    <span class="naslov">{{ naslovStranice$ | async }}</span>
+  </div>
+
   <span class="razmak"></span>
 
-  <ng-container *ngIf="korisnik$ | async as korisnik; else nijePrijavljen">
-    <!-- Zahtevi za pristup (vidljivo administratoru kad ima zahteva na čekanju). -->
+  <ng-container *ngIf="korisnik$ | async; else nijePrijavljen">
     <a
       mat-icon-button
       routerLink="/zahtevi"
-      *ngIf="(brojZahteva$ | async) as broj"
-      [matBadge]="broj"
-      matBadgeColor="warn"
-      matBadgeSize="small"
-      aria-label="Zahtevi za pristup"
       matTooltip="Zahtevi za pristup"
+      [matBadge]="brojZahteva$ | async"
+      [matBadgeHidden]="(brojZahteva$ | async) === 0"
+      matBadgeColor="warn"
+      aria-label="Zahtevi za pristup"
     >
-      <mat-icon>group_add</mat-icon>
+      <mat-icon>notifications_none</mat-icon>
     </a>
-
-    <!-- Prebacivanje između firmi (tenant switcher). -->
-    <button mat-button class="org-dugme" [matMenuTriggerFor]="orgMeni">
-      <mat-icon>apartment</mat-icon>
-      <span class="org-naziv">{{ (aktivnaKompanija$ | async)?.naziv || 'Firma' }}</span>
-      <mat-icon>arrow_drop_down</mat-icon>
-    </button>
-    <mat-menu #orgMeni="matMenu">
-      <button
-        mat-menu-item
-        *ngFor="let k of mojeKompanije$ | async"
-        (click)="promeni(k.id)"
-      >
-        <mat-icon>{{ k.id === (aktivnaKompanija$ | async)?.id ? 'check' : 'business' }}</mat-icon>
-        <span>{{ k.naziv }}</span>
-      </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="otvoriDijalog()">
-        <mat-icon>add_business</mat-icon>
-        <span>Nova / pridruži se firmi</span>
-      </button>
-    </mat-menu>
-
-    <button mat-button [matMenuTriggerFor]="korisnikMeni">
-      <mat-icon>account_circle</mat-icon>
-      <span class="korisnik-ime">{{ korisnik.ime }}</span>
-    </button>
-    <mat-menu #korisnikMeni="matMenu">
-      <div class="meni-zaglavlje">
-        <strong>{{ korisnik.ime }}</strong>
-        <small>{{ korisnik.email }}</small>
-      </div>
-      <button mat-menu-item (click)="odjava()">
-        <mat-icon>logout</mat-icon>
-        <span>Odjavi se</span>
-      </button>
-    </mat-menu>
+    <a mat-raised-button class="novi-uzorak" routerLink="/uzorci/novo">
+      <mat-icon>add</mat-icon>
+      <span>Novi uzorak</span>
+    </a>
   </ng-container>
 
   <ng-template #nijePrijavljen>

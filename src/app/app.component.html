@@ -3,12 +3,12 @@
 <mat-sidenav-container class="ljuska">
   <mat-sidenav
     #drawer
-    mode="side"
-    [opened]="(prijavljen$ | async) ?? false"
-    [disableClose]="true"
+    [mode]="(maliEkran$ | async) ? 'over' : 'side'"
+    [(opened)]="meniOtvoren"
+    [disableClose]="!((maliEkran$ | async) ?? false)"
     class="bocna-strana"
   >
-    <app-sidebar></app-sidebar>
+    <app-sidebar (navigated)="zatvoriMeni(drawer)"></app-sidebar>
   </mat-sidenav>
 
   <mat-sidenav-content class="sadrzaj">

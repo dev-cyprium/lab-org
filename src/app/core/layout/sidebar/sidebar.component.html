@@ -1,11 +1,62 @@
-<mat-nav-list class="bocni-meni">
-  <a
-    mat-list-item
-    *ngFor="let stavka of meniStavke"
-    [routerLink]="stavka.putanja"
-    routerLinkActive="aktivna"
-  >
-    <mat-icon matListItemIcon>{{ stavka.ikonica }}</mat-icon>
-    <span matListItemTitle>{{ stavka.naziv }}</span>
-  </a>
-</mat-nav-list>
+<div class="sidebar-ljuska">
+  <div class="sidebar-brend">
+    <mat-icon>biotech</mat-icon>
+    <span>LabOrg</span>
+  </div>
+
+  <button type="button" class="firma" [matMenuTriggerFor]="orgMeni">
+    <span class="firma-ikona"><mat-icon>apartment</mat-icon></span>
+    <span class="firma-tekst">
+      <small>Aktivna firma</small>
+      <strong>{{ (aktivnaKompanija$ | async)?.naziv || 'Izaberi firmu' }}</strong>
+    </span>
+    <mat-icon>unfold_more</mat-icon>
+  </button>
+
+  <mat-menu #orgMeni="matMenu">
+    <button mat-menu-item *ngFor="let k of mojeKompanije$ | async" (click)="promeni(k.id)">
+      <mat-icon>{{ k.id === (aktivnaKompanija$ | async)?.id ? 'check' : 'business' }}</mat-icon>
+      <span>{{ k.naziv }}</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="otvoriDijalog()">
+      <mat-icon>add_business</mat-icon>
+      <span>Nova / pridruži se firmi</span>
+    </button>
+  </mat-menu>
+
+  <mat-nav-list class="bocni-meni">
+    <section class="meni-grupa" *ngFor="let grupa of meniGrupe">
+      <div class="grupa-naziv">{{ grupa.naziv }}</div>
+      <a
+        mat-list-item
+        *ngFor="let stavka of grupa.stavke"
+        [routerLink]="stavka.putanja"
+        routerLinkActive="aktivna"
+        [routerLinkActiveOptions]="{ exact: stavka.putanja === '/pocetna' }"
+        (click)="navigated.emit()"
+      >
+        <mat-icon matListItemIcon>{{ stavka.ikonica }}</mat-icon>
+        <span matListItemTitle>{{ stavka.naziv }}</span>
+      </a>
+    </section>
+  </mat-nav-list>
+
+  <div class="korisnik" *ngIf="korisnik$ | async as korisnik">
+    <span class="avatar">{{ korisnik.ime.charAt(0) | uppercase }}</span>
+    <span class="korisnik-tekst">
+      <strong>{{ korisnik.ime }}</strong>
+      <small>{{ korisnik.email }}</small>
+    </span>
+    <button mat-icon-button [matMenuTriggerFor]="korisnikMeni" aria-label="Korisnički meni">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </div>
+
+  <mat-menu #korisnikMeni="matMenu">
+    <button mat-menu-item (click)="odjava()">
+      <mat-icon>logout</mat-icon>
+      <span>Odjavi se</span>
+    </button>
+  </mat-menu>
+</div>

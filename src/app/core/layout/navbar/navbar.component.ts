@@ -1,11 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { map } from 'rxjs/operators';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, map, startWith } from 'rxjs/operators';
 
 import { AuthService } from '../../services/auth.service';
-import { NotifikacijaService } from '../../services/notifikacija.service';
-import { OrgDialogComponent } from '../../../shared/components/org-dialog/org-dialog.component';
 
 @Component({
   selector: 'app-navbar',
@@ -16,46 +13,30 @@ export class NavbarComponent {
   @Output() toggleSidenav = new EventEmitter<void>();
 
   korisnik$ = this.auth.korisnik$;
-  aktivnaKompanija$ = this.auth.aktivnaKompanija$;
-  mojeKompanije$ = this.auth.mojeKompanije$;
   brojZahteva$ = this.auth.zahteviZaMojeFirme$.pipe(map((z) => z.length));
+  naslovStranice$ = this.router.events.pipe(
+    filter((dogadjaj): dogadjaj is NavigationEnd => dogadjaj instanceof NavigationEnd),
+    startWith(null),
+    map(() => this.naslovZaPutanju(this.router.url))
+  );
 
-  constructor(
-    private auth: AuthService,
-    private router: Router,
-    private dialog: MatDialog,
-    private notifikacija: NotifikacijaService
-  ) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
-  async promeni(kompanijaId: string): Promise<void> {
-    await this.auth.promeniKompaniju(kompanijaId);
-    this.notifikacija.uspeh('Firma je promenjena.');
-    this.reloadPocetna();
-  }
-
-  otvoriDijalog(): void {
-    const ref = this.dialog.open(OrgDialogComponent, { width: '420px' });
-    ref.afterClosed().subscribe((rezultat) => {
-      if (!rezultat) return;
-      if (rezultat.tip === 'firma') {
-        this.notifikacija.uspeh('Firma je spremna.');
-        this.reloadPocetna();
-      } else {
-        this.notifikacija.uspeh('Zahtev je poslat — čeka odobrenje.');
-      }
-    });
-  }
-
-  async odjava(): Promise<void> {
-    await this.auth.odjava();
-    this.notifikacija.uspeh('Odjavljeni ste.');
-    this.router.navigate(['/prijava']);
-  }
-
-  // Reload preko dashboard-a da se podaci povuku za novu aktivnu firmu.
-  private reloadPocetna(): void {
-    this.router
-      .navigateByUrl('/', { skipLocationChange: true })
-      .then(() => this.router.navigate(['/pocetna']));
+  private naslovZaPutanju(putanja: string): string {
+    const koren = putanja.split('?')[0].split('/')[1] ?? '';
+    const naslovi: Record<string, string> = {
+      pocetna: 'Kontrolni centar',
+      uzorci: 'Uzorci',
+      zasejavanja: 'Zasejavanja',
+      analize: 'Analize',
+      podloge: 'Podloge i reagensi',
+      mikroorganizmi: 'Mikroorganizmi',
+      laboratorije: 'Laboratorije',
+      zaposleni: 'Zaposleni',
+      zahtevi: 'Zahtevi za pristup',
+      pristup: 'Pristup firmi',
+      dobrodosli: 'Početak rada',
+    };
+    return naslovi[koren] ?? 'LabOrg';
   }
 }

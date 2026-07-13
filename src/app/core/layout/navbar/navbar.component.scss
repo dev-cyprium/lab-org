@@ -15,47 +15,57 @@
   gap: 0.4rem;
   color: inherit;
   text-decoration: none;
-  font-weight: 600;
   font-size: 1.15rem;
+  font-weight: 600;
 }
 
 .razmak {
   flex: 1 1 auto;
 }
 
-.korisnik-ime {
-  margin-left: 0.25rem;
-}
+.kontekst {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 
-.org-dugme {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  margin-right: 0.25rem;
+  .putanja {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
 
-  .org-naziv {
-    max-width: 180px;
+  .naslov {
     overflow: hidden;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 }
 
-.meni-zaglavlje {
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid var(--laborg-border);
+.novi-uzorak {
+  margin-left: 0.35rem;
+  color: var(--laborg-navy) !important;
+  background: #fff !important;
+}
 
-  .uloga {
-    text-transform: capitalize;
-    color: var(--laborg-primary);
-  }
+.korisnik-ime {
+  margin-left: 0.25rem;
 }
 
 @media (max-width: 600px) {
-  .korisnik-ime,
-  .kompanija {
+  .kontekst .putanja,
+  .novi-uzorak span,
+  .korisnik-ime {
     display: none;
+  }
+
+  .novi-uzorak {
+    min-width: 40px;
+    padding: 0 10px;
   }
 }
