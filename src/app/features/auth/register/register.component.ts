@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 
-import { Kompanija } from '../../../core/models';
 import { AuthService, RegistracijaPodaci } from '../../../core/services/auth.service';
-import { KompanijeService } from '../../../core/services/kompanije.service';
 import { NotifikacijaService } from '../../../core/services/notifikacija.service';
+import { SeedService } from '../../../core/services/seed.service';
 
 @Component({
   selector: 'app-register',
@@ -24,11 +22,10 @@ export class RegisterComponent implements OnInit {
     pib: [''],
     adresa: [''],
     kontakt: [''],
-    // za pridruživanje postojećoj
-    kompanijaId: [''],
+    // kod za pridruživanje postojećoj firmi
+    kod: [''],
   });
 
-  kompanije$!: Observable<Kompanija[]>;
   slanje = false;
 
   // Google režim: identitet dolazi sa Google naloga, bira se samo firma.
@@ -38,13 +35,12 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private kompanijeServis: KompanijeService,
     private router: Router,
-    private notifikacija: NotifikacijaService
+    private notifikacija: NotifikacijaService,
+    private seed: SeedService
   ) {}
 
   ngOnInit(): void {
-    this.kompanije$ = this.kompanijeServis.ucitajSve();
     this.forma.get('nacin')!.valueChanges.subscribe((nacin) => this.podesiValidatore(nacin));
 
     // Ako je korisnik već prijavljen preko Google-a (stigao sa login stranice), samo bira firmu.
@@ -84,30 +80,40 @@ export class RegisterComponent implements OnInit {
       email: v.email ?? '',
       lozinka: v.lozinka ?? '',
       ime: v.ime ?? this.googleIme,
-      nacin: v.nacin as 'nova' | 'postojeca',
+      nacin: v.nacin as 'nova' | 'postojeca' | 'demo',
       nazivKompanije: v.nazivKompanije ?? undefined,
       pib: v.pib ?? undefined,
       adresa: v.adresa ?? undefined,
       kontakt: v.kontakt ?? undefined,
-      kompanijaId: v.kompanijaId ?? undefined,
+      kod: v.kod ?? undefined,
     };
 
     try {
-      if (this.googleMode) {
-        await this.auth.dovrsiGoogleProfil(podaci);
+      const firmaId = this.googleMode
+        ? await this.auth.dovrsiGoogleProfil(podaci)
+        : await this.auth.registruj(podaci);
+      if (podaci.nacin === 'demo') {
+        await this.seed.uveziDemoPodatke(firmaId ?? undefined);
+        this.notifikacija.uspeh('Demo firma je spremna — istraži aplikaciju.');
+        this.router.navigate(['/pocetna']);
+      } else if (podaci.nacin === 'nova') {
+        this.notifikacija.uspeh('Firma je kreirana.');
+        this.router.navigate(['/pocetna']);
       } else {
-        await this.auth.registruj(podaci);
+        this.notifikacija.uspeh('Zahtev je poslat — čeka odobrenje.');
+        this.router.navigate(['/pristup']);
       }
-      this.notifikacija.uspeh('Nalog je kreiran.');
-      this.router.navigate(['/pocetna']);
     } catch (e: any) {
-      const poruka =
-        e?.code === 'auth/email-already-in-use'
-          ? 'Već postoji nalog sa ovim email-om.'
-          : 'Registracija nije uspela. Pokušaj ponovo.';
-      this.notifikacija.greska(poruka);
+      this.notifikacija.greska(this.poruka(e));
       this.slanje = false;
     }
+  }
+
+  private poruka(e: any): string {
+    if (e?.message === 'KOD_NE_POSTOJI') return 'Firma sa tim kodom ne postoji.';
+    if (e?.message === 'VEC_CLAN') return 'Već si član te firme.';
+    if (e?.code === 'auth/email-already-in-use') return 'Već postoji nalog sa ovim email-om.';
+    return 'Registracija nije uspela. Pokušaj ponovo.';
   }
 
   private aktivirajGoogleRezim(): void {
@@ -123,15 +129,12 @@ export class RegisterComponent implements OnInit {
 
   private podesiValidatore(nacin: string | null): void {
     const naziv = this.forma.get('nazivKompanije')!;
-    const kompanija = this.forma.get('kompanijaId')!;
-    if (nacin === 'nova') {
-      naziv.setValidators(Validators.required);
-      kompanija.clearValidators();
-    } else {
-      kompanija.setValidators(Validators.required);
-      naziv.clearValidators();
-    }
+    const kod = this.forma.get('kod')!;
+    naziv.clearValidators();
+    kod.clearValidators();
+    if (nacin === 'nova') naziv.setValidators(Validators.required);
+    else if (nacin === 'postojeca') kod.setValidators(Validators.required);
     naziv.updateValueAndValidity();
-    kompanija.updateValueAndValidity();
+    kod.updateValueAndValidity();
   }
 }

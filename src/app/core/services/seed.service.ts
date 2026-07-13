@@ -20,8 +20,10 @@ export class SeedService {
     return firstValueFrom(this.http.get<T[]>(`assets/data/${fajl}`));
   }
 
-  async uveziDemoPodatke(): Promise<void> {
-    const kompanijaId = this.auth.kompanijaId;
+  // kompanijaId se može proslediti eksplicitno (npr. odmah po kreiranju demo firme,
+  // pre nego što se aktivna firma osveži kroz Firestore listener).
+  async uveziDemoPodatke(kompanijaId?: string): Promise<void> {
+    kompanijaId = kompanijaId ?? this.auth.kompanijaId ?? undefined;
     if (!kompanijaId) {
       throw new Error('Nema aktivne kompanije.');
     }

@@ -3,7 +3,8 @@
   <form [formGroup]="forma" class="forma">
     <mat-radio-group formControlName="nacin" class="nacin">
       <mat-radio-button value="nova">Napravi novu firmu</mat-radio-button>
-      <mat-radio-button value="postojeca">Pridruži se postojećoj</mat-radio-button>
+      <mat-radio-button value="postojeca">Pridruži se preko koda</mat-radio-button>
+      <mat-radio-button value="demo">Uvezi demo podatke (za probu)</mat-radio-button>
     </mat-radio-group>
 
     <ng-container *ngIf="nova">
@@ -26,22 +27,25 @@
       </mat-form-field>
     </ng-container>
 
-    <mat-form-field appearance="outline" *ngIf="!nova">
-      <mat-label>Izaberi firmu</mat-label>
-      <mat-select formControlName="kompanijaId">
-        <mat-option *ngFor="let k of dostupne" [value]="k.id">{{ k.naziv }}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="forma.get('kompanijaId')?.hasError('required')">Izaberi firmu.</mat-error>
-    </mat-form-field>
+    <ng-container *ngIf="nacin === 'postojeca'">
+      <mat-form-field appearance="outline">
+        <mat-label>Kod firme</mat-label>
+        <input matInput appAutoFocus formControlName="kod" placeholder="npr. LAB-7F3X" />
+        <mat-icon matSuffix>vpn_key</mat-icon>
+        <mat-hint>Kod ti daje administrator firme.</mat-hint>
+        <mat-error *ngIf="forma.get('kod')?.hasError('required')">Unesi kod firme.</mat-error>
+      </mat-form-field>
+      <p class="prazno">Pristup ti odobrava administrator te firme.</p>
+    </ng-container>
 
-    <p class="prazno" *ngIf="!nova && dostupne.length === 0">
-      Već si član svih postojećih firmi.
+    <p class="prazno" *ngIf="nacin === 'demo'">
+      Napravićemo „Demo firmu“ popunjenu primerima da odmah istražiš aplikaciju.
     </p>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Odustani</button>
   <button mat-raised-button color="primary" [disabled]="slanje" (click)="sacuvaj()">
-    {{ nova ? 'Napravi' : 'Pridruži se' }}
+    {{ nacin === 'postojeca' ? 'Pošalji zahtev' : nacin === 'demo' ? 'Uvezi demo' : 'Napravi' }}
   </button>
 </mat-dialog-actions>
