@@ -8,7 +8,7 @@
 
     p {
       margin: 0;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--laborg-text-muted);
     }
   }
 }
@@ -25,10 +25,11 @@
 }
 
 .stat {
-  --c: #00897b;
+  --c: var(--laborg-primary);
   text-align: center;
   padding: 1rem 0.5rem;
   border-top: 3px solid var(--c);
+  font-variant-numeric: tabular-nums;
 
   mat-icon {
     font-size: 2rem;
@@ -39,19 +40,19 @@
 
   // Različita boja po kartici da dashboard ne bude jednoličan.
   &:nth-child(1) {
-    --c: #00897b;
+    --c: var(--laborg-primary);
   }
   &:nth-child(2) {
-    --c: #3949ab;
+    --c: var(--laborg-secondary);
   }
   &:nth-child(3) {
-    --c: #00acc1;
+    --c: var(--laborg-info);
   }
   &:nth-child(4) {
-    --c: #c62828;
+    --c: var(--laborg-critical);
   }
   &:nth-child(5) {
-    --c: #f9a825;
+    --c: var(--laborg-warning);
   }
 
   .broj {
@@ -62,24 +63,24 @@
     small {
       font-size: 1rem;
       font-weight: 400;
-      color: rgba(0, 0, 0, 0.55);
+      color: var(--laborg-text-muted);
     }
   }
 
   .labela {
     font-size: 0.8rem;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--laborg-text-muted);
   }
 
   // Crveni akcenat kad ima neispravnih nalaza.
   &.lose:not(.bez-problema) mat-icon,
   &.lose:not(.bez-problema) .broj {
-    color: #c62828;
+    color: var(--laborg-critical);
   }
 
   &.upozorenje mat-icon,
   &.upozorenje .broj {
-    color: #f9a825;
+    color: var(--laborg-warning);
   }
 }
 
@@ -103,7 +104,7 @@
       font-size: 2.25rem;
       width: 2.25rem;
       height: 2.25rem;
-      color: var(--laborg-primary, #00796b);
+      color: var(--laborg-primary);
     }
 
     h2 {
@@ -114,12 +115,12 @@
     p {
       margin: 0;
       font-size: 0.85rem;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--laborg-text-muted);
     }
   }
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--laborg-shadow-md) !important;
     transform: translateY(-2px);
   }
 }

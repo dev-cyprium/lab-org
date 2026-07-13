@@ -2,11 +2,12 @@
   padding-top: 0.5rem;
 
   .aktivna {
-    background: rgba(0, 121, 107, 0.12);
+    background: var(--laborg-primary-soft);
+    box-shadow: inset 3px 0 0 var(--laborg-primary);
 
     mat-icon,
     span {
-      color: var(--laborg-primary, #00796b);
+      color: var(--laborg-primary-dark);
       font-weight: 600;
     }
   }

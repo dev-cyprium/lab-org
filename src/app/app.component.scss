@@ -7,13 +7,17 @@
 .ljuska {
   flex: 1 1 auto;
   min-height: 0; // da flex dete može da se skuplja i skroluje
-  background: #eef1f4;
+  background-color: var(--laborg-workspace);
+  background-image:
+    linear-gradient(rgba(16, 42, 51, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 42, 51, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 .bocna-strana {
   width: 250px;
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
-  background: #fff;
+  border-right: 1px solid var(--laborg-border);
+  background: var(--laborg-surface);
 }
 
 .sadrzaj {

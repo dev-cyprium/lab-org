@@ -6,7 +6,7 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   font-size: 0.85rem;
-  color: rgba(0, 0, 0, 0.6);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  background: #fafafa;
+  color: var(--laborg-text-muted);
+  border-top: 1px solid var(--laborg-border);
+  background: var(--laborg-surface-subtle);
 }

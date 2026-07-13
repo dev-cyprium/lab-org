@@ -1,10 +1,18 @@
 @use '@angular/material' as mat;
+@use 'sass:map';
 
 @include mat.core();
 
-// Tema u bojama laboratorije — teal (primarna) i zelena (akcenat).
-$laborg-primary: mat.define-palette(mat.$teal-palette, 700);
-$laborg-accent: mat.define-palette(mat.$light-green-palette, 600);
+// Material tema prati semantičke tokene definisane ispod.
+$laborg-primary-palette: map.deep-merge(
+  mat.$teal-palette,
+  (
+    700: #087f73,
+    contrast: (700: #fff),
+  )
+);
+$laborg-primary: mat.define-palette($laborg-primary-palette, 700);
+$laborg-accent: mat.define-palette(mat.$light-green-palette, 700);
 $laborg-warn: mat.define-palette(mat.$red-palette);
 
 $laborg-theme: mat.define-light-theme(
@@ -21,10 +29,45 @@ $laborg-theme: mat.define-light-theme(
 
 @include mat.all-component-themes($laborg-theme);
 
-// CSS varijabla koju koriste custom komponente (ikonice, aktivna stavka menija...).
 :root {
-  --laborg-primary: #{mat.get-color-from-palette($laborg-primary, 700)};
-  --laborg-accent: #{mat.get-color-from-palette($laborg-accent, 600)};
+  // Brend i semantičke boje.
+  --laborg-navy: #102a33;
+  --laborg-navy-soft: #193b46;
+  --laborg-primary: #087f73;
+  --laborg-primary-dark: #06665d;
+  --laborg-primary-soft: #e3f2ef;
+  --laborg-info: #167d9a;
+  --laborg-info-soft: #e5f3f7;
+  --laborg-secondary: #4d62a8;
+  --laborg-accent: #84a83b;
+  --laborg-accent-soft: #f0f5e4;
+  --laborg-warning: #c67a0a;
+  --laborg-warning-soft: #fff3dc;
+  --laborg-critical: #b83a3a;
+  --laborg-critical-soft: #fbeaea;
+  --laborg-success: #287a55;
+  --laborg-success-soft: #e6f3ec;
+
+  // Površine, tekst i ivice.
+  --laborg-workspace: #f4f7f7;
+  --laborg-surface: #ffffff;
+  --laborg-surface-subtle: #f8fbfb;
+  --laborg-surface-tinted: #edf4f5;
+  --laborg-text: #163139;
+  --laborg-text-muted: #60747a;
+  --laborg-text-soft: #7d8e93;
+  --laborg-border: #d8e2e4;
+  --laborg-border-strong: #bdcbce;
+
+  // Geometrija i interakcija.
+  --laborg-radius-sm: 8px;
+  --laborg-radius-md: 12px;
+  --laborg-radius-lg: 18px;
+  --laborg-shadow-sm: 0 1px 2px rgba(16, 42, 51, 0.06);
+  --laborg-shadow-md: 0 8px 24px rgba(16, 42, 51, 0.09);
+  --laborg-shadow-lg: 0 18px 48px rgba(16, 42, 51, 0.13);
+  --laborg-focus: 0 0 0 3px rgba(22, 125, 154, 0.25);
+  --laborg-transition: 180ms ease;
 }
 
 html,
@@ -35,32 +78,55 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-  background: #f5f5f5;
+  color: var(--laborg-text);
+  background-color: var(--laborg-workspace);
+  background-image:
+    linear-gradient(rgba(16, 42, 51, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 42, 51, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--laborg-primary-dark);
+  text-underline-offset: 0.18em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--laborg-info);
+  outline-offset: 3px;
 }
 
 // Boje za notifikacije (snackbar) — zeleno za uspeh, crveno za grešku.
 .snack-uspeh {
-  --mdc-snackbar-container-color: #2e7d32;
+  --mdc-snackbar-container-color: var(--laborg-success);
   --mdc-snackbar-supporting-text-color: #fff;
   --mat-snack-bar-button-color: #fff;
 }
 .snack-greska {
-  --mdc-snackbar-container-color: #c62828;
+  --mdc-snackbar-container-color: var(--laborg-critical);
   --mdc-snackbar-supporting-text-color: #fff;
   --mat-snack-bar-button-color: #fff;
 }
 
 // Zajedničke pomoćne klase koje se ponavljaju kroz feature ekrane.
 .zaglavlje {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 
   h1 {
-    margin: 0 0 0.25rem;
+    margin: 0 0 0.35rem;
+    color: var(--laborg-navy);
+    font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
   }
 
   p {
     margin: 0;
-    color: rgba(0, 0, 0, 0.6);
+    max-width: 70ch;
+    color: var(--laborg-text-muted);
+    line-height: 1.55;
   }
 }
 
@@ -73,7 +139,7 @@ body {
 .prazno {
   padding: 1.5rem;
   text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--laborg-text-muted);
 }
 
 .filteri {
@@ -88,16 +154,17 @@ body {
 
 .tabela {
   width: 100%;
-  background: #fff;
-  border-radius: 8px;
+  background: var(--laborg-surface);
+  border: 1px solid var(--laborg-border);
+  border-radius: var(--laborg-radius-md);
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--laborg-shadow-sm);
 
   .red {
     cursor: pointer;
   }
   .red:hover {
-    background: rgba(0, 121, 107, 0.06);
+    background: var(--laborg-primary-soft);
   }
 }
 
@@ -109,10 +176,12 @@ body {
 
 .kartica {
   cursor: pointer;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: box-shadow var(--laborg-transition), transform var(--laborg-transition),
+    border-color var(--laborg-transition);
 }
 .kartica:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-color: var(--laborg-border-strong);
+  box-shadow: var(--laborg-shadow-md);
   transform: translateY(-2px);
 }
 
@@ -121,7 +190,7 @@ mat-icon.mini {
   width: 1rem;
   height: 1rem;
   vertical-align: middle;
-  color: var(--laborg-primary, #00796b);
+  color: var(--laborg-primary);
 }
 
 // Zajednički stilovi za detalj ekrane.
@@ -137,7 +206,7 @@ mat-icon.mini {
   }
 
   .opis {
-    color: rgba(0, 0, 0, 0.75);
+    color: var(--laborg-text-muted);
     margin-bottom: 1.25rem;
   }
 
@@ -152,13 +221,14 @@ mat-icon.mini {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 3rem 1rem;
+  padding: clamp(2rem, 6vw, 4.5rem) 1rem;
 }
 
 .auth-kartica {
   width: 100%;
   max-width: 420px;
   padding: 2rem;
+  box-shadow: var(--laborg-shadow-lg) !important;
 
   .brend {
     display: flex;
@@ -166,13 +236,15 @@ mat-icon.mini {
     gap: 0.5rem;
     font-size: 1.4rem;
     font-weight: 600;
-    color: var(--laborg-primary, #00796b);
+    color: var(--laborg-primary);
     margin-bottom: 0.5rem;
   }
 
   h1 {
     margin: 0 0 1.25rem;
-    font-size: 1.5rem;
+    color: var(--laborg-navy);
+    font-size: 1.75rem;
+    letter-spacing: -0.02em;
   }
 
   form {
@@ -188,7 +260,7 @@ mat-icon.mini {
   .prebaci {
     margin: 1rem 0 0;
     text-align: center;
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--laborg-text-muted);
   }
 
   // "ili" razdvajač između email forme i Google dugmeta.
@@ -197,14 +269,14 @@ mat-icon.mini {
     align-items: center;
     text-align: center;
     margin: 1rem 0;
-    color: rgba(0, 0, 0, 0.45);
+    color: var(--laborg-text-soft);
     font-size: 0.85rem;
 
     &::before,
     &::after {
       content: '';
       flex: 1;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      border-bottom: 1px solid var(--laborg-border);
     }
     span {
       padding: 0 0.75rem;
@@ -263,11 +335,11 @@ mat-icon.mini {
   td {
     text-align: left;
     padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid var(--laborg-border);
   }
 
   th {
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--laborg-text-muted);
     font-weight: 600;
   }
 }
@@ -289,7 +361,7 @@ mat-icon.mini {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: var(--laborg-primary, #00796b);
+  color: var(--laborg-primary-dark);
   font-weight: 600;
 }
 
@@ -297,26 +369,36 @@ mat-icon.mini {
 .oznaka {
   display: inline-block;
   padding: 0.15rem 0.5rem;
-  border-radius: 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: capitalize;
 }
 .oznaka.ok {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--laborg-success-soft);
+  border-color: rgba(40, 122, 85, 0.18);
+  color: var(--laborg-success);
 }
 .oznaka.lose {
-  background: #ffebee;
-  color: #c62828;
+  background: var(--laborg-critical-soft);
+  border-color: rgba(184, 58, 58, 0.18);
+  color: var(--laborg-critical);
 }
 .oznaka.neutral {
-  background: #eceff1;
-  color: #455a64;
+  background: var(--laborg-surface-tinted);
+  border-color: var(--laborg-border);
+  color: var(--laborg-text-muted);
 }
 .oznaka.info {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: var(--laborg-info-soft);
+  border-color: rgba(22, 125, 154, 0.18);
+  color: var(--laborg-info);
+}
+.oznaka.upozorenje {
+  background: var(--laborg-warning-soft);
+  border-color: rgba(198, 122, 10, 0.2);
+  color: var(--laborg-warning);
 }
 
 /* ————— Poliranje izgleda ————— */
@@ -330,8 +412,8 @@ mat-icon.mini {
   height: 44px;
   border-radius: 50%;
   overflow: visible;
-  background: rgba(0, 121, 107, 0.1);
-  color: var(--laborg-primary, #00796b);
+  background: var(--laborg-primary-soft);
+  color: var(--laborg-primary);
 
   &.mat-icon {
     font-size: 24px;
@@ -341,41 +423,69 @@ mat-icon.mini {
 
 // Akcije (Izmeni/Obriši) u detaljima — da ne budu zalepljene za vrh kartice.
 .kartica-detalj {
-  border-top: 3px solid var(--laborg-primary, #00796b);
-
   .traka-akcija {
     padding: 0.25rem 0 0.9rem;
     margin-bottom: 0.9rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    border-bottom: 1px solid var(--laborg-border);
   }
-}
-
-// Akcenat pored naslova sekcije (ubija sterilnost).
-.zaglavlje h1 {
-  position: relative;
-  padding-left: 0.9rem;
-}
-.zaglavlje h1::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.15em;
-  bottom: 0.15em;
-  width: 5px;
-  border-radius: 3px;
-  background: linear-gradient(var(--laborg-primary, #00796b), var(--laborg-accent, #7cb342));
 }
 
 // Tabele — tonirano zaglavlje umesto potpuno belog.
 .tabela th.mat-mdc-header-cell {
-  background: #f2f6f5;
-  color: #37474f;
-  font-weight: 600;
+  background: var(--laborg-surface-tinted);
+  color: var(--laborg-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
 }
 
-// Kartice malo mekše i sa jačim hover-om.
+// Material površine dele isti vizuelni jezik.
 mat-card {
-  border-radius: 12px !important;
+  border: 1px solid var(--laborg-border) !important;
+  border-radius: var(--laborg-radius-md) !important;
+  box-shadow: var(--laborg-shadow-sm) !important;
+}
+
+.mat-mdc-menu-panel,
+.mat-mdc-dialog-surface {
+  border: 1px solid var(--laborg-border);
+  border-radius: var(--laborg-radius-md) !important;
+  box-shadow: var(--laborg-shadow-lg) !important;
+}
+
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: var(--laborg-border-strong);
+  --mdc-outlined-text-field-hover-outline-color: var(--laborg-text-soft);
+  --mdc-outlined-text-field-focus-outline-color: var(--laborg-primary);
+  --mdc-outlined-text-field-label-text-color: var(--laborg-text-muted);
+}
+
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button {
+  transition: box-shadow var(--laborg-transition), transform var(--laborg-transition),
+    background-color var(--laborg-transition), border-color var(--laborg-transition);
+}
+
+.mat-mdc-raised-button:hover,
+.mat-mdc-unelevated-button:hover {
+  box-shadow: 0 5px 14px rgba(8, 127, 115, 0.2) !important;
+  transform: translateY(-1px);
+}
+
+.mat-mdc-button-base:focus-visible {
+  box-shadow: var(--laborg-focus) !important;
+}
+
+.mat-mdc-table .mat-mdc-row {
+  transition: background-color var(--laborg-transition);
+}
+
+.mat-mdc-card-title,
+h2,
+h3 {
+  color: var(--laborg-navy);
 }
 
 // Dugmad u traci akcija — malo razmaka i poravnanje.
@@ -383,4 +493,28 @@ mat-card {
   align-items: center;
 }
 
+@media (max-width: 600px) {
+  .auth-kartica {
+    padding: 1.5rem;
+  }
 
+  .filteri {
+    gap: 0.5rem;
+
+    mat-form-field {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
