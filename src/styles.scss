@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
+@use './app/features/dashboard/dashboard-layout';
 
 @include mat.core();
 

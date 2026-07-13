@@ -1,47 +1,181 @@
 <section class="dashboard">
-  <header class="zaglavlje">
-    <h1>Dobrodošli u LabOrg</h1>
-    <p>Sistem za vođenje laboratorije za ispitivanje bezbednosti hrane i vode.</p>
+  <header class="komandno-zaglavlje">
+    <div>
+      <span class="eyebrow">Dnevni pregled laboratorije</span>
+      <h1>Kontrolni centar</h1>
+      <p>Prioriteti, tok uzoraka i kvalitet nalaza na jednom mestu.</p>
+    </div>
+    <div class="brze-akcije">
+      <a mat-raised-button color="primary" [routerLink]="brzeAkcije[0].putanja">
+        <mat-icon>{{ brzeAkcije[0].ikonica }}</mat-icon>
+        {{ brzeAkcije[0].naziv }}
+      </a>
+      <a
+        mat-stroked-button
+        *ngFor="let akcija of sekundarneAkcije"
+        [routerLink]="akcija.putanja"
+      >
+        <mat-icon>{{ akcija.ikonica }}</mat-icon>
+        {{ akcija.naziv }}
+      </a>
+    </div>
   </header>
 
   <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
 
-  <div class="statistika" *ngIf="statistika as s">
-    <mat-card class="stat">
-      <mat-icon>science</mat-icon>
-      <div class="broj">{{ s.ukupnoUzoraka }}</div>
-      <div class="labela">Ukupno uzoraka</div>
-    </mat-card>
-    <mat-card class="stat">
-      <mat-icon>hourglass_top</mat-icon>
-      <div class="broj">{{ s.uAnalizi }}</div>
-      <div class="labela">U obradi</div>
-    </mat-card>
-    <mat-card class="stat">
-      <mat-icon>fact_check</mat-icon>
-      <div class="broj">{{ s.ukupnoAnaliza }}</div>
-      <div class="labela">Analiza</div>
-    </mat-card>
-    <mat-card class="stat lose" [class.bez-problema]="s.neispravnih === 0">
-      <mat-icon>gpp_bad</mat-icon>
-      <div class="broj">{{ s.neispravnih }} <small>({{ s.procenatNeispravnih }}%)</small></div>
-      <div class="labela">Neispravnih nalaza</div>
-    </mat-card>
-    <mat-card class="stat" [class.upozorenje]="s.istekloPodloga > 0">
-      <mat-icon>event_busy</mat-icon>
-      <div class="broj">{{ s.istekloPodloga }}</div>
-      <div class="labela">Isteklih podloga</div>
-    </mat-card>
-  </div>
+  <ng-container *ngIf="statistika as s">
+    <section class="metrike" aria-label="Ključni pokazatelji">
+      <article class="metrika primarna">
+        <div class="metrika-ikona"><mat-icon>science</mat-icon></div>
+        <div>
+          <strong>{{ s.ukupnoUzoraka }}</strong>
+          <span>Ukupno uzoraka</span>
+        </div>
+      </article>
+      <article class="metrika info">
+        <div class="metrika-ikona"><mat-icon>hourglass_top</mat-icon></div>
+        <div>
+          <strong>{{ s.uAnalizi }}</strong>
+          <span>Čeka ili je u obradi</span>
+        </div>
+      </article>
+      <article class="metrika kriticna" [class.mirna]="s.neispravnih === 0">
+        <div class="metrika-ikona"><mat-icon>gpp_bad</mat-icon></div>
+        <div>
+          <strong>{{ s.neispravnih }}</strong>
+          <span>Neispravnih nalaza</span>
+        </div>
+      </article>
+      <article class="metrika upozorenje" [class.mirna]="s.istekloPodloga === 0">
+        <div class="metrika-ikona"><mat-icon>event_busy</mat-icon></div>
+        <div>
+          <strong>{{ s.istekloPodloga }}</strong>
+          <span>Isteklih podloga</span>
+        </div>
+      </article>
+    </section>
 
-  <h2 class="podnaslov">Brzi pristup</h2>
-  <div class="kartice">
-    <mat-card class="kartica" *ngFor="let k of kartice" [routerLink]="k.putanja">
-      <mat-card-content>
-        <mat-icon>{{ k.ikonica }}</mat-icon>
-        <h2>{{ k.naziv }}</h2>
-        <p>{{ k.opis }}</p>
-      </mat-card-content>
+    <mat-card class="tok-kartica">
+      <div class="sekcija-zaglavlje">
+        <div>
+          <span class="eyebrow">Tok uzoraka</span>
+          <h2>Gde se posao trenutno nalazi</h2>
+        </div>
+        <a mat-button routerLink="/uzorci">Svi uzorci <mat-icon>arrow_forward</mat-icon></a>
+      </div>
+      <div class="tok">
+        <a class="faza" routerLink="/uzorci">
+          <span class="faza-ikona"><mat-icon>inventory_2</mat-icon></span>
+          <strong>{{ s.tokRada.primljeni }}</strong>
+          <span>Primljeni</span>
+        </a>
+        <mat-icon class="strelica">chevron_right</mat-icon>
+        <a class="faza" routerLink="/zasejavanja">
+          <span class="faza-ikona"><mat-icon>grain</mat-icon></span>
+          <strong>{{ s.tokRada.zasejani }}</strong>
+          <span>Zasejani</span>
+        </a>
+        <mat-icon class="strelica">chevron_right</mat-icon>
+        <a class="faza" routerLink="/uzorci">
+          <span class="faza-ikona"><mat-icon>biotech</mat-icon></span>
+          <strong>{{ s.tokRada.uAnalizi }}</strong>
+          <span>U analizi</span>
+        </a>
+        <mat-icon class="strelica">chevron_right</mat-icon>
+        <a class="faza zavrsena" routerLink="/uzorci">
+          <span class="faza-ikona"><mat-icon>task_alt</mat-icon></span>
+          <strong>{{ s.tokRada.zavrseni }}</strong>
+          <span>Završeni</span>
+        </a>
+      </div>
     </mat-card>
-  </div>
+
+    <div class="operativni-grid">
+      <mat-card class="prioriteti-kartica">
+        <div class="sekcija-zaglavlje">
+          <div>
+            <span class="eyebrow">Za pažnju</span>
+            <h2>Prioriteti</h2>
+          </div>
+          <span class="brojac">{{ s.prioriteti.length }}</span>
+        </div>
+
+        <div class="prioriteti" *ngIf="s.prioriteti.length; else nemaPrioriteta">
+          <a
+            class="prioritet"
+            *ngFor="let prioritet of s.prioriteti"
+            [class]="'prioritet ' + prioritet.nivo"
+            [routerLink]="prioritet.putanja"
+          >
+            <span class="prioritet-ikona"><mat-icon>{{ prioritet.ikonica }}</mat-icon></span>
+            <span class="prioritet-tekst">
+              <strong>{{ prioritet.naslov }}</strong>
+              <small>{{ prioritet.opis }}</small>
+            </span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+        <ng-template #nemaPrioriteta>
+          <div class="prazno-stanje">
+            <mat-icon>verified</mat-icon>
+            <strong>Nema hitnih stavki</strong>
+            <span>Laboratorijski tok je pod kontrolom.</span>
+          </div>
+        </ng-template>
+      </mat-card>
+
+      <mat-card class="kvalitet-kartica">
+        <div class="sekcija-zaglavlje">
+          <div>
+            <span class="eyebrow">Kvalitet nalaza</span>
+            <h2>Rezultati analiza</h2>
+          </div>
+        </div>
+        <div class="kvalitet-sadrzaj">
+          <div class="donut" [style.--v]="s.procenatIspravnih">
+            <div>
+              <strong>{{ s.procenatIspravnih }}%</strong>
+              <span>ispravnih</span>
+            </div>
+          </div>
+          <div class="legenda">
+            <div>
+              <span class="tacka ispravno"></span>
+              <span>Ispravni</span>
+              <strong>{{ s.ispravnih }}</strong>
+            </div>
+            <div>
+              <span class="tacka neispravno"></span>
+              <span>Neispravni</span>
+              <strong>{{ s.neispravnih }}</strong>
+            </div>
+            <div class="ukupno">
+              <span>Ukupno analiza</span>
+              <strong>{{ s.ukupnoAnaliza }}</strong>
+            </div>
+          </div>
+        </div>
+        <a mat-button routerLink="/analize">Pregledaj analize <mat-icon>arrow_forward</mat-icon></a>
+      </mat-card>
+    </div>
+
+    <mat-card class="aktivnosti-kartica">
+      <div class="sekcija-zaglavlje">
+        <div>
+          <span class="eyebrow">Poslednje evidentirano</span>
+          <h2>Nedavna aktivnost</h2>
+        </div>
+      </div>
+      <div class="aktivnosti">
+        <a class="aktivnost" *ngFor="let aktivnost of s.aktivnosti" [routerLink]="aktivnost.putanja">
+          <span class="aktivnost-ikona"><mat-icon>{{ aktivnost.ikonica }}</mat-icon></span>
+          <span class="aktivnost-tekst">
+            <strong>{{ aktivnost.naslov }}</strong>
+            <small>{{ aktivnost.opis }}</small>
+          </span>
+          <time>{{ aktivnost.datum | datumSr }}</time>
+        </a>
+      </div>
+    </mat-card>
+  </ng-container>
 </section>

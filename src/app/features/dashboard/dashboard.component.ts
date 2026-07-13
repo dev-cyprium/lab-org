@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StatistikaService, Statistika } from '../../core/services/statistika.service';
 import { LaboratorijeService } from '../../core/services/laboratorije.service';
+import { Statistika, StatistikaService } from '../../core/services/statistika.service';
 
-interface BrzaKartica {
+interface BrzaAkcija {
   naziv: string;
   putanja: string;
   ikonica: string;
-  opis: string;
 }
 
 @Component({
@@ -20,12 +19,12 @@ export class DashboardComponent implements OnInit {
   statistika?: Statistika;
   ucitavanje = true;
 
-  kartice: BrzaKartica[] = [
-    { naziv: 'Uzorci', putanja: '/uzorci', ikonica: 'science', opis: 'Prijem i praćenje uzoraka hrane i vode' },
-    { naziv: 'Analize', putanja: '/analize', ikonica: 'fact_check', opis: 'Rezultati i ocena ispravnosti' },
-    { naziv: 'Mikroorganizmi', putanja: '/mikroorganizmi', ikonica: 'coronavirus', opis: 'Katalog patogena i indikatora' },
-    { naziv: 'Podloge', putanja: '/podloge', ikonica: 'water_drop', opis: 'Podloge i reagensi u laboratoriji' },
+  brzeAkcije: BrzaAkcija[] = [
+    { naziv: 'Novi uzorak', putanja: '/uzorci/novo', ikonica: 'add' },
+    { naziv: 'Nova analiza', putanja: '/analize/novo', ikonica: 'fact_check' },
+    { naziv: 'Novo zasejavanje', putanja: '/zasejavanja/novo', ikonica: 'grain' },
   ];
+  sekundarneAkcije = this.brzeAkcije.slice(1);
 
   constructor(
     private statistikaServis: StatistikaService,
@@ -34,7 +33,6 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Ako firma nema nijednu laboratoriju, vodimo korisnika na onboarding.
     this.laboratorijeServis.ucitajSve().subscribe((laboratorije) => {
       if (laboratorije.length === 0) {
         this.router.navigate(['/dobrodosli']);
