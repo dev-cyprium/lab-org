@@ -1,0 +1,36 @@
+<section class="pristup">
+  <mat-card class="kartica">
+    <header class="zaglavlje">
+      <mat-icon>hourglass_top</mat-icon>
+      <h1>Pristup firmi</h1>
+      <p>Da bi radio u aplikaciji, pridruži se firmi preko koda ili napravi svoju.</p>
+    </header>
+
+    <ng-container *ngIf="mojiZahtevi$ | async as zahtevi">
+      <div class="zahtevi" *ngIf="zahtevi.length; else nemaZahteva">
+        <div class="zahtev" *ngFor="let z of zahtevi">
+          <mat-icon>hourglass_empty</mat-icon>
+          <div class="tekst">
+            <strong>Pristup za firmu „{{ z.kompanijaNaziv }}“ još u obradi.</strong>
+            <small>Administrator te firme treba da odobri tvoj zahtev.</small>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #nemaZahteva>
+        <p class="prazno">Trenutno nemaš poslatih zahteva.</p>
+      </ng-template>
+    </ng-container>
+
+    <div class="akcije">
+      <button mat-raised-button color="primary" (click)="otvoriDijalog()">
+        <mat-icon>add_business</mat-icon>
+        Pridruži se ili napravi firmu
+      </button>
+      <button mat-button (click)="odjava()">
+        <mat-icon>logout</mat-icon>
+        Odjavi se
+      </button>
+    </div>
+  </mat-card>
+</section>
