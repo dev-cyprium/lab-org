@@ -1,6 +1,9 @@
 rules_version = '2';
 
-// Multi-tenant: korisnik može biti član više firmi (kompanijeIds) i vidi podatke svih svojih firmi.
+// Multi-tenant sa kontrolisanim pristupom:
+// - izvor istine o pripadnosti je kolekcija `clanstva/{kompanijaId__uid}` (piše je osnivač ili admin),
+// - korisnik NE može sam sebi da doda firmu (za razliku od ranijeg modela preko profila),
+// - firme se ne mogu izlistati; pridruživanje ide preko koda + zahteva koji admin odobrava.
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -8,31 +11,75 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function korisnikDoc() {
-      return get(/databases/$(database)/documents/korisnici/$(request.auth.uid)).data;
+    function ja() {
+      return request.auth.uid;
     }
 
-    // Firme kojima korisnik pripada (podržava i stari format sa jednim kompanijaId).
-    function mojeKompanije() {
-      return korisnikDoc().get('kompanijeIds', [korisnikDoc().get('kompanijaId', '')]);
+    function clanstvoPut(kid) {
+      return /databases/$(database)/documents/clanstva/$(kid + '__' + ja());
+    }
+
+    function jeClan(kid) {
+      return prijavljen() && exists(clanstvoPut(kid));
+    }
+
+    function jeAdmin(kid) {
+      return jeClan(kid) && get(clanstvoPut(kid)).data.uloga == 'admin';
+    }
+
+    function osnivac(kid) {
+      return get(/databases/$(database)/documents/kompanije/$(kid)).data.osnivacUid == ja();
     }
 
     function pripada(podaci) {
-      return prijavljen() && (podaci.kompanijaId in mojeKompanije());
+      return jeClan(podaci.kompanijaId);
     }
 
-    // Profil korisnika — svako vidi i menja samo svoj.
+    // Profil — svako samo svoj. Nema više uticaj na pristup podacima (samo lični podaci + aktivna firma).
     match /korisnici/{uid} {
-      allow read, create, update: if prijavljen() && request.auth.uid == uid;
+      allow read, create, update: if prijavljen() && ja() == uid;
     }
 
-    // Kompanije — spisak je čitljiv (za registraciju i prebacivanje), izmene samo za svoje firme.
+    // Firme — čita samo član (get, nema listanja). Kreira svaki prijavljen (postaje osnivač).
     match /kompanije/{id} {
-      allow read, create: if prijavljen();
-      allow update, delete: if prijavljen() && (id in mojeKompanije());
+      allow get: if jeClan(id);
+      allow create: if prijavljen() && request.resource.data.osnivacUid == ja();
+      allow update, delete: if jeAdmin(id);
     }
 
-    // Tenant kolekcije — pristup isključivo podacima firmi kojima korisnik pripada.
+    // Kod -> firma. Get samo ako se zna tačan kod (id). Upisuje samo osnivač te firme.
+    match /kompanije_kodovi/{kod} {
+      allow get: if prijavljen();
+      allow create: if prijavljen() && osnivac(request.resource.data.kompanijaId);
+    }
+
+    // Članstva — izvor istine o pripadnosti firmama.
+    match /clanstva/{cid} {
+      allow read: if prijavljen()
+        && (resource == null || resource.data.uid == ja() || jeAdmin(resource.data.kompanijaId));
+      // Osnivač sam sebi dodeljuje admin; admin dodeljuje druge korisnike.
+      allow create: if prijavljen() && (
+        (request.resource.data.uid == ja()
+          && request.resource.data.uloga == 'admin'
+          && osnivac(request.resource.data.kompanijaId))
+        || jeAdmin(request.resource.data.kompanijaId)
+      );
+      allow delete: if prijavljen()
+        && (resource.data.uid == ja() || jeAdmin(resource.data.kompanijaId));
+    }
+
+    // Zahtevi za pristup — podnosilac kreira svoj; admin firme čita i odobrava/odbija.
+    match /zahtevi/{zid} {
+      allow read: if prijavljen()
+        && (resource == null || resource.data.uid == ja() || jeAdmin(resource.data.kompanijaId));
+      allow create: if prijavljen()
+        && request.resource.data.uid == ja()
+        && request.resource.data.status == 'na_cekanju';
+      allow delete: if prijavljen()
+        && (resource.data.uid == ja() || jeAdmin(resource.data.kompanijaId));
+    }
+
+    // Tenant kolekcije — pristup isključivo članovima firme (provera exists nad clanstvima).
     match /laboratorije/{id} {
       allow read, update, delete: if pripada(resource.data);
       allow create: if pripada(request.resource.data);

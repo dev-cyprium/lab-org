@@ -7,3 +7,5 @@ export * from './analiza.model';
 export * from './zaposleni.model';
 export * from './laboratorija.model';
 export * from './korisnik.model';
+export * from './clanstvo.model';
+export * from './zahtev.model';
