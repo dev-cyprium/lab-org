@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { map } from 'rxjs/operators';
 
 import { AuthService } from '../../services/auth.service';
 import { NotifikacijaService } from '../../services/notifikacija.service';
@@ -17,6 +18,7 @@ export class NavbarComponent {
   korisnik$ = this.auth.korisnik$;
   aktivnaKompanija$ = this.auth.aktivnaKompanija$;
   mojeKompanije$ = this.auth.mojeKompanije$;
+  brojZahteva$ = this.auth.zahteviZaMojeFirme$.pipe(map((z) => z.length));
 
   constructor(
     private auth: AuthService,
@@ -33,10 +35,13 @@ export class NavbarComponent {
 
   otvoriDijalog(): void {
     const ref = this.dialog.open(OrgDialogComponent, { width: '420px' });
-    ref.afterClosed().subscribe((uspeh) => {
-      if (uspeh) {
+    ref.afterClosed().subscribe((rezultat) => {
+      if (!rezultat) return;
+      if (rezultat.tip === 'firma') {
         this.notifikacija.uspeh('Firma je spremna.');
         this.reloadPocetna();
+      } else {
+        this.notifikacija.uspeh('Zahtev je poslat — čeka odobrenje.');
       }
     });
   }

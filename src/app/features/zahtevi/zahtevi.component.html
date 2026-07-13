@@ -1,0 +1,43 @@
+<section class="zahtevi-strana">
+  <header class="zaglavlje">
+    <h1>Zahtevi za pristup</h1>
+    <p>Korisnici koji su uneli kod tvoje firme i čekaju odobrenje.</p>
+  </header>
+
+  <ng-container *ngIf="zahtevi$ | async as zahtevi">
+    <div class="lista" *ngIf="zahtevi.length; else prazno">
+      <mat-card class="zahtev" *ngFor="let z of zahtevi">
+        <div class="podaci">
+          <mat-icon>person</mat-icon>
+          <div class="tekst">
+            <strong>{{ z.ime || 'Bez imena' }}</strong>
+            <small>{{ z.email }}</small>
+            <small class="firma">traži pristup firmi „{{ z.kompanijaNaziv }}“</small>
+          </div>
+        </div>
+        <div class="akcije">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="obrada === z.id"
+            (click)="odobri(z)"
+          >
+            <mat-icon>check</mat-icon>
+            Odobri
+          </button>
+          <button mat-stroked-button [disabled]="obrada === z.id" (click)="odbij(z)">
+            <mat-icon>close</mat-icon>
+            Odbij
+          </button>
+        </div>
+      </mat-card>
+    </div>
+
+    <ng-template #prazno>
+      <div class="prazno">
+        <mat-icon>inbox</mat-icon>
+        <p>Nema zahteva na čekanju.</p>
+      </div>
+    </ng-template>
+  </ng-container>
+</section>

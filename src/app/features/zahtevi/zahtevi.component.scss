@@ -1,0 +1,73 @@
+.zahtevi-strana {
+  padding: 1.5rem;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.zaglavlje {
+  margin-bottom: 1.25rem;
+
+  h1 {
+    margin: 0 0 0.25rem;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.zahtev {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.podaci {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  > mat-icon {
+    color: #00796b;
+  }
+
+  .tekst {
+    display: flex;
+    flex-direction: column;
+
+    small {
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .firma {
+      color: #00695c;
+    }
+  }
+}
+
+.akcije {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.prazno {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.55);
+  padding: 3rem 1rem;
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+  }
+}

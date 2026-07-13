@@ -21,6 +21,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatBadgeModule } from '@angular/material/badge';
 
 // Jedno mesto za sve Material module — SharedModule ga reeksportuje dalje.
 const MATERIAL = [
@@ -45,6 +46,7 @@ const MATERIAL = [
   MatDividerModule,
   MatRadioModule,
   MatCheckboxModule,
+  MatBadgeModule,
 ];
 
 @NgModule({

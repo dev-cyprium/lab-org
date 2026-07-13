@@ -16,6 +16,20 @@
   <span class="razmak"></span>
 
   <ng-container *ngIf="korisnik$ | async as korisnik; else nijePrijavljen">
+    <!-- Zahtevi za pristup (vidljivo administratoru kad ima zahteva na čekanju). -->
+    <a
+      mat-icon-button
+      routerLink="/zahtevi"
+      *ngIf="(brojZahteva$ | async) as broj"
+      [matBadge]="broj"
+      matBadgeColor="warn"
+      matBadgeSize="small"
+      aria-label="Zahtevi za pristup"
+      matTooltip="Zahtevi za pristup"
+    >
+      <mat-icon>group_add</mat-icon>
+    </a>
+
     <!-- Prebacivanje između firmi (tenant switcher). -->
     <button mat-button class="org-dugme" [matMenuTriggerFor]="orgMeni">
       <mat-icon>apartment</mat-icon>
