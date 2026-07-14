@@ -1,64 +1,47 @@
-<section class="detalj sirok">
-  <a mat-button routerLink="/analize">
-    <mat-icon>arrow_back</mat-icon>
-    Nazad na analize
-  </a>
-
+<section class="operativni-detalj">
+  <a mat-button class="nazad-link" routerLink="/analize"><mat-icon>arrow_back</mat-icon>Nazad na analize</a>
   <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
 
   <ng-container *ngIf="!ucitavanje">
-    <mat-card *ngIf="analiza as a; else nemaGa" class="kartica-detalj">
-      <div class="traka-akcija">
-        <a mat-stroked-button color="primary" [routerLink]="['/analize', a.id, 'izmena']">
-          <mat-icon>edit</mat-icon>
-          Izmeni
-        </a>
-        <button mat-stroked-button color="warn" (click)="obrisi()">
-          <mat-icon>delete</mat-icon>
-          Obriši
-        </button>
+    <ng-container *ngIf="analiza as a; else nemaGa">
+      <header class="detalj-zaglavlje">
+        <div class="identitet">
+          <span class="sifra">REZULTAT ISPITIVANJA</span>
+          <div class="naslov-red"><h1>{{ a.sifra }}</h1><span class="oznaka" [ngClass]="a.zakljucak === 'ISPRAVAN' ? 'ok' : 'lose'">{{ a.zakljucak | ocena }}</span></div>
+          <p>{{ a.tip }} · {{ a.datumAnalize | datumSr }}</p>
+        </div>
+        <div class="detalj-akcije">
+          <a mat-stroked-button color="primary" [routerLink]="['/analize', a.id, 'izmena']"><mat-icon>edit</mat-icon>Izmeni</a>
+          <button mat-stroked-button color="warn" (click)="obrisi()"><mat-icon>delete</mat-icon>Obriši</button>
+        </div>
+      </header>
+
+      <div class="rezultat-panel" [ngClass]="a.zakljucak === 'ISPRAVAN' ? 'ok' : 'lose'">
+        <mat-icon>{{ a.zakljucak === 'ISPRAVAN' ? 'verified' : 'gpp_bad' }}</mat-icon>
+        <div><span>Ukupna ocena</span><strong>{{ a.zakljucak | ocena }}</strong></div>
+        <span>{{ a.stavke.length }} {{ a.stavke.length === 1 ? 'parametar' : 'parametara' }}</span>
       </div>
-      <mat-card-header>
-        <mat-card-title>{{ a.sifra }}</mat-card-title>
-        <mat-card-subtitle>{{ a.tip }} · {{ a.datumAnalize | datumSr }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="ocena-traka" [ngClass]="a.zakljucak === 'ISPRAVAN' ? 'ok' : 'lose'">
-          <mat-icon>{{ a.zakljucak === 'ISPRAVAN' ? 'verified' : 'gpp_bad' }}</mat-icon>
-          <span>Ukupna ocena: <strong>{{ a.zakljucak | ocena }}</strong></span>
+
+      <mat-card class="pregled-kartica">
+        <div class="sekcija-zaglavlje"><div><span class="eyebrow">Kontekst</span><h2>Podaci o analizi</h2></div><mat-icon>fact_check</mat-icon></div>
+        <div class="pregled-polja">
+          <div><span>Uzorak</span><a *ngIf="uzorak" [routerLink]="['/uzorci', uzorak.id]">{{ uzorak.naziv }} ({{ uzorak.sifra }})</a><strong *ngIf="!uzorak">—</strong></div>
+          <div><span>Analitičar</span><a *ngIf="analiticar" [routerLink]="['/zaposleni', analiticar.id]">{{ analiticar.ime }} {{ analiticar.prezime }}</a><strong *ngIf="!analiticar">—</strong></div>
+          <div><span>Metoda / standard</span><strong>{{ a.metoda }}</strong></div>
+          <div><span>Datum analize</span><strong>{{ a.datumAnalize | datumSr }}</strong></div>
         </div>
+      </mat-card>
 
-        <div class="polja">
-          <div class="polje">
-            <span class="oznaka-polja">Uzorak</span>
-            <a *ngIf="uzorak" [routerLink]="['/uzorci', uzorak.id]">{{ uzorak.naziv }} ({{ uzorak.sifra }})</a>
-            <span *ngIf="!uzorak">—</span>
-          </div>
-          <div class="polje">
-            <span class="oznaka-polja">Analitičar</span>
-            <a *ngIf="analiticar" [routerLink]="['/zaposleni', analiticar.id]">{{ analiticar.ime }} {{ analiticar.prezime }}</a>
-            <span *ngIf="!analiticar">—</span>
-          </div>
-          <div class="polje"><span class="oznaka-polja">Metoda</span><span>{{ a.metoda }}</span></div>
+      <mat-card class="parametri-kartica">
+        <div class="sekcija-zaglavlje"><div><span class="eyebrow">Merenja</span><h2>Parametri ({{ a.stavke.length }})</h2></div></div>
+        <div class="tabela-omot">
+          <table class="tabelica">
+            <tr><th>Parametar</th><th>Rezultat</th><th>Granica</th><th>Status</th></tr>
+            <tr *ngFor="let st of a.stavke"><td><strong>{{ st.parametar }}</strong></td><td class="metrika">{{ st.vrednost | cfu: st.jedinica }}</td><td>{{ st.granica }}</td><td><span class="oznaka" [ngClass]="st.status === 'ispravan' ? 'ok' : 'lose'">{{ st.status | ocena }}</span></td></tr>
+          </table>
         </div>
-
-        <h3>Parametri ({{ a.stavke.length }})</h3>
-        <table class="tabelica">
-          <tr>
-            <th>Parametar</th><th>Rezultat</th><th>Granica</th><th>Status</th>
-          </tr>
-          <tr *ngFor="let st of a.stavke">
-            <td>{{ st.parametar }}</td>
-            <td>{{ st.vrednost | cfu: st.jedinica }}</td>
-            <td>{{ st.granica }}</td>
-            <td>
-              <span class="oznaka" [ngClass]="st.status === 'ispravan' ? 'ok' : 'lose'">{{ st.status | ocena }}</span>
-            </td>
-          </tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
-
-    <ng-template #nemaGa><p class="prazno">Analiza ne postoji.</p></ng-template>
+      </mat-card>
+    </ng-container>
+    <ng-template #nemaGa><div class="prazno-red"><mat-icon>search_off</mat-icon><h2>Analiza ne postoji</h2><p>Vrati se na listu i izaberi drugu analizu.</p><a mat-stroked-button routerLink="/analize">Nazad na analize</a></div></ng-template>
   </ng-container>
 </section>

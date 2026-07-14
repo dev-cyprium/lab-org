@@ -1,62 +1,91 @@
-<section>
-  <header class="zaglavlje">
-    <h1>Analize</h1>
-    <p>Rezultati ispitivanja i ocena ispravnosti uzoraka.</p>
-  </header>
-
-  <div class="traka-akcija">
+<section class="operativni-red">
+  <header class="red-zaglavlje">
+    <div>
+      <span class="eyebrow">Kontrola kvaliteta</span>
+      <h1>Analize</h1>
+      <p>Rezultati ispitivanja i odluke o ispravnosti uzoraka.</p>
+    </div>
     <a mat-raised-button color="primary" routerLink="/analize/novo">
       <mat-icon>add</mat-icon>
       Nova analiza
     </a>
-  </div>
+  </header>
 
-  <div class="filteri">
-    <mat-form-field appearance="outline">
-      <mat-label>Pretraga</mat-label>
-      <input matInput [(ngModel)]="pretraga" (ngModelChange)="filtriraj()" placeholder="šifra ili uzorak..." />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Ocena</mat-label>
-      <mat-select [(ngModel)]="ocenaFilter" (ngModelChange)="filtriraj()">
-        <mat-option value="sve">Sve</mat-option>
-        <mat-option value="ISPRAVAN">Ispravan</mat-option>
-        <mat-option value="NEISPRAVAN">Neispravan</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+  <mat-card class="radna-traka">
+    <div class="rezultat-broj">
+      <strong>{{ prikazane.length }}</strong>
+      <span>{{ prikazane.length === 1 ? 'analiza' : 'analiza' }}</span>
+    </div>
+    <div class="filteri-reda filteri-dva">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Pretraga</mat-label>
+        <input matInput [(ngModel)]="pretraga" (ngModelChange)="filtriraj()" placeholder="šifra ili uzorak..." />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Ocena</mat-label>
+        <mat-select [(ngModel)]="ocenaFilter" (ngModelChange)="filtriraj()">
+          <mat-option value="sve">Sve ocene</mat-option>
+          <mat-option value="ISPRAVAN">Ispravan</mat-option>
+          <mat-option value="NEISPRAVAN">Neispravan</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="aktivni-filteri" *ngIf="imaAktivneFiltere">
+      <span>Aktivno:</span>
+      <button type="button" class="filter-chip" *ngIf="pretraga.trim()" (click)="ukloniPretragu()">
+        „{{ pretraga }}” <mat-icon>close</mat-icon>
+      </button>
+      <button type="button" class="filter-chip" *ngIf="ocenaFilter !== 'sve'" (click)="ukloniOcenu()">
+        {{ ocenaFilter | ocena }} <mat-icon>close</mat-icon>
+      </button>
+      <button mat-button type="button" (click)="ocistiFiltere()">Očisti sve</button>
+    </div>
+  </mat-card>
 
   <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
 
-  <table mat-table [dataSource]="prikazane" class="tabela" *ngIf="!ucitavanje">
-    <ng-container matColumnDef="sifra">
-      <th mat-header-cell *matHeaderCellDef>Šifra</th>
-      <td mat-cell *matCellDef="let a">{{ a.sifra }}</td>
-    </ng-container>
-    <ng-container matColumnDef="uzorak">
-      <th mat-header-cell *matHeaderCellDef>Uzorak</th>
-      <td mat-cell *matCellDef="let a">{{ uzorci.get(a.uzorakId) }}</td>
-    </ng-container>
-    <ng-container matColumnDef="tip">
-      <th mat-header-cell *matHeaderCellDef>Tip</th>
-      <td mat-cell *matCellDef="let a">{{ a.tip }}</td>
-    </ng-container>
-    <ng-container matColumnDef="datum">
-      <th mat-header-cell *matHeaderCellDef>Datum</th>
-      <td mat-cell *matCellDef="let a">{{ a.datumAnalize | datumSr }}</td>
-    </ng-container>
-    <ng-container matColumnDef="zakljucak">
-      <th mat-header-cell *matHeaderCellDef>Ocena</th>
-      <td mat-cell *matCellDef="let a">
-        <span class="oznaka" [ngClass]="a.zakljucak === 'ISPRAVAN' ? 'ok' : 'lose'">{{ a.zakljucak | ocena }}</span>
-      </td>
-    </ng-container>
+  <div class="tabela-omot" *ngIf="!ucitavanje && prikazane.length">
+    <table mat-table [dataSource]="prikazane" class="tabela operativna-tabela">
+      <ng-container matColumnDef="sifra">
+        <th mat-header-cell *matHeaderCellDef>Šifra</th>
+        <td mat-cell *matCellDef="let a"><strong>{{ a.sifra }}</strong></td>
+      </ng-container>
+      <ng-container matColumnDef="uzorak">
+        <th mat-header-cell *matHeaderCellDef>Uzorak</th>
+        <td mat-cell *matCellDef="let a"><span class="glavna-celija"><strong>{{ uzorci.get(a.uzorakId) || '—' }}</strong><small>{{ a.metoda }}</small></span></td>
+      </ng-container>
+      <ng-container matColumnDef="tip">
+        <th mat-header-cell *matHeaderCellDef>Tip</th>
+        <td mat-cell *matCellDef="let a">{{ a.tip }}</td>
+      </ng-container>
+      <ng-container matColumnDef="datum">
+        <th mat-header-cell *matHeaderCellDef>Datum</th>
+        <td mat-cell *matCellDef="let a">{{ a.datumAnalize | datumSr }}</td>
+      </ng-container>
+      <ng-container matColumnDef="zakljucak">
+        <th mat-header-cell *matHeaderCellDef>Ocena</th>
+        <td mat-cell *matCellDef="let a"><span class="oznaka" [ngClass]="a.zakljucak === 'ISPRAVAN' ? 'ok' : 'lose'">{{ a.zakljucak | ocena }}</span></td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="kolone"></tr>
+      <tr mat-row *matRowDef="let red; columns: kolone" class="red" [routerLink]="['/analize', red.id]"></tr>
+    </table>
+  </div>
 
-    <tr mat-header-row *matHeaderRowDef="kolone"></tr>
-    <tr mat-row *matRowDef="let red; columns: kolone" class="red" [routerLink]="['/analize', red.id]"></tr>
-  </table>
+  <div class="mobilni-operativni" *ngIf="!ucitavanje && prikazane.length">
+    <a class="mobilna-operativna-kartica" *ngFor="let a of prikazane" [routerLink]="['/analize', a.id]">
+      <span class="mobilni-vrh"><strong>{{ a.sifra }}</strong><span class="oznaka" [ngClass]="a.zakljucak === 'ISPRAVAN' ? 'ok' : 'lose'">{{ a.zakljucak | ocena }}</span></span>
+      <span class="mobilni-naziv">{{ uzorci.get(a.uzorakId) || 'Nepoznat uzorak' }}</span>
+      <span class="mobilni-meta"><span><mat-icon>biotech</mat-icon>{{ a.tip }}</span><span><mat-icon>event</mat-icon>{{ a.datumAnalize | datumSr }}</span></span>
+      <span class="mobilni-poreklo">{{ a.metoda }}</span>
+    </a>
+  </div>
 
-  <p class="prazno" *ngIf="!ucitavanje && prikazane.length === 0">Nema analiza koje odgovaraju pretrazi.</p>
+  <div class="prazno-red" *ngIf="!ucitavanje && prikazane.length === 0">
+    <mat-icon>fact_check</mat-icon>
+    <h2>{{ imaAktivneFiltere ? 'Nema odgovarajućih analiza' : 'Još nema analiza' }}</h2>
+    <p>{{ imaAktivneFiltere ? 'Promeni ili ukloni aktivne filtere.' : 'Unesi prvi rezultat ispitivanja uzorka.' }}</p>
+    <button mat-stroked-button *ngIf="imaAktivneFiltere" (click)="ocistiFiltere()">Očisti filtere</button>
+    <a mat-raised-button color="primary" *ngIf="!imaAktivneFiltere" routerLink="/analize/novo">Nova analiza</a>
+  </div>
 </section>

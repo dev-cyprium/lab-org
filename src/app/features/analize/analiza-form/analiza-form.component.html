@@ -1,134 +1,45 @@
-<section class="detalj sirok">
-  <a mat-button routerLink="/analize">
-    <mat-icon>arrow_back</mat-icon>
-    Nazad
-  </a>
-
+<section class="operativna-forma-strana">
+  <a mat-button class="nazad-link" routerLink="/analize"><mat-icon>arrow_back</mat-icon>Nazad na analize</a>
   <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
 
-  <mat-card class="kartica-detalj" *ngIf="!ucitavanje">
-    <mat-card-header>
-      <mat-card-title>{{ uredjivanje ? 'Izmena analize' : 'Nova analiza' }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="forma" (ngSubmit)="sacuvaj()" class="forma">
-        <div class="red-polja">
-          <mat-form-field appearance="outline">
-            <mat-label>Šifra</mat-label>
-            <input matInput appAutoFocus formControlName="sifra" />
-            <mat-error *ngIf="forma.get('sifra')?.hasError('required')">Obavezno polje.</mat-error>
-          </mat-form-field>
+  <ng-container *ngIf="!ucitavanje">
+    <header class="forma-zaglavlje"><div><span class="eyebrow">Kontrola kvaliteta</span><h1>{{ uredjivanje ? 'Izmena analize' : 'Nova analiza' }}</h1><p>Definiši ispitivanje, unesi parametre i potvrdi rezultat.</p></div></header>
+    <form [formGroup]="forma" (ngSubmit)="sacuvaj()" class="forma">
+      <mat-card class="forma-sekcija">
+        <div class="sekcija-zaglavlje"><div><span class="eyebrow">Korak 1</span><h2>Osnovni podaci</h2></div><mat-icon>assignment</mat-icon></div>
+        <p class="sekcija-opis">Poveži analizu sa uzorkom, analitičarem i korišćenom metodom.</p>
+        <div class="forma-grid tri">
+          <mat-form-field appearance="outline"><mat-label>Šifra</mat-label><input matInput appAutoFocus formControlName="sifra" /><mat-error *ngIf="forma.get('sifra')?.hasError('required')">Obavezno polje.</mat-error></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>Tip</mat-label><mat-select formControlName="tip"><mat-option *ngFor="let t of tipovi" [value]="t">{{ t }}</mat-option></mat-select></mat-form-field>
+          <div class="datum-polje"><mat-form-field appearance="outline"><mat-label>Datum analize</mat-label><input matInput type="date" formControlName="datumAnalize" /><mat-error *ngIf="forma.get('datumAnalize')?.hasError('required')">Obavezno polje.</mat-error></mat-form-field><button mat-button type="button" class="datum-danas" (click)="postaviDanas()">Danas</button></div>
+        </div>
+        <div class="forma-grid dva">
+          <mat-form-field appearance="outline"><mat-label>Uzorak</mat-label><mat-select formControlName="uzorakId"><mat-option *ngFor="let u of uzorci" [value]="u.id">{{ u.naziv }} ({{ u.sifra }})</mat-option></mat-select><mat-error *ngIf="forma.get('uzorakId')?.hasError('required')">Izaberi uzorak.</mat-error></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>Analitičar</mat-label><mat-select formControlName="zaposleniId"><mat-option *ngFor="let z of zaposleni" [value]="z.id">{{ z.ime }} {{ z.prezime }}</mat-option></mat-select><mat-error *ngIf="forma.get('zaposleniId')?.hasError('required')">Izaberi analitičara.</mat-error></mat-form-field>
+        </div>
+        <mat-form-field appearance="outline"><mat-label>Metoda / standard</mat-label><input matInput formControlName="metoda" /><mat-error *ngIf="forma.get('metoda')?.hasError('required')">Obavezno polje.</mat-error></mat-form-field>
+      </mat-card>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Tip</mat-label>
-            <mat-select formControlName="tip">
-              <mat-option *ngFor="let t of tipovi" [value]="t">{{ t }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <div class="datum-polje">
-            <mat-form-field appearance="outline">
-              <mat-label>Datum analize</mat-label>
-              <input matInput type="date" formControlName="datumAnalize" />
-              <mat-error *ngIf="forma.get('datumAnalize')?.hasError('required')">Obavezno polje.</mat-error>
-            </mat-form-field>
-            <button mat-button type="button" class="datum-danas" (click)="postaviDanas()">Danas</button>
+      <mat-card class="forma-sekcija" formArrayName="stavke">
+        <div class="sekcija-zaglavlje"><div><span class="eyebrow">Korak 2</span><h2>Parametri ispitivanja</h2></div><button mat-stroked-button color="primary" type="button" (click)="dodajStavku()"><mat-icon>add</mat-icon>Dodaj parametar</button></div>
+        <p class="sekcija-opis">Svaki parametar ima rezultat, dozvoljenu granicu i pojedinačni status.</p>
+        <div class="stavka" *ngFor="let s of stavke.controls; let i = index" [formGroupName]="i">
+          <div class="stavka-zaglavlje"><strong>Parametar {{ i + 1 }}</strong><button mat-icon-button color="warn" type="button" (click)="ukloniStavku(i)" aria-label="Ukloni parametar"><mat-icon>delete</mat-icon></button></div>
+          <div class="forma-grid dva">
+            <mat-form-field appearance="outline"><mat-label>Parametar</mat-label><input matInput formControlName="parametar" /></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Organizam (opciono)</mat-label><mat-select formControlName="mikroorganizamId"><mat-option value="">—</mat-option><mat-option *ngFor="let m of mikroorganizmi" [value]="m.id">{{ m.naziv }}</mat-option></mat-select></mat-form-field>
+          </div>
+          <div class="forma-grid cetiri">
+            <mat-form-field appearance="outline"><mat-label>Vrednost</mat-label><input matInput formControlName="vrednost" placeholder="npr. 45 ili odsutna" /></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Jedinica</mat-label><input matInput formControlName="jedinica" /></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Granica</mat-label><input matInput formControlName="granica" /></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Status</mat-label><mat-select formControlName="status"><mat-option value="ispravan">ispravan</mat-option><mat-option value="neispravan">neispravan</mat-option></mat-select></mat-form-field>
           </div>
         </div>
+        <p class="napomena"><mat-icon class="mini">info</mat-icon>Ukupna ocena se računa automatski — dovoljna je jedna neispravna stavka za NEISPRAVAN.</p>
+      </mat-card>
 
-        <div class="red-polja">
-          <mat-form-field appearance="outline">
-            <mat-label>Uzorak</mat-label>
-            <mat-select formControlName="uzorakId">
-              <mat-option *ngFor="let u of uzorci" [value]="u.id">{{ u.naziv }} ({{ u.sifra }})</mat-option>
-            </mat-select>
-            <mat-error *ngIf="forma.get('uzorakId')?.hasError('required')">Izaberi uzorak.</mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Analitičar</mat-label>
-            <mat-select formControlName="zaposleniId">
-              <mat-option *ngFor="let z of zaposleni" [value]="z.id">{{ z.ime }} {{ z.prezime }}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="forma.get('zaposleniId')?.hasError('required')">Izaberi analitičara.</mat-error>
-          </mat-form-field>
-        </div>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Metoda / standard</mat-label>
-          <input matInput formControlName="metoda" />
-          <mat-error *ngIf="forma.get('metoda')?.hasError('required')">Obavezno polje.</mat-error>
-        </mat-form-field>
-
-        <div class="stavke" formArrayName="stavke">
-          <div class="stavke-zaglavlje">
-            <h3>Parametri</h3>
-            <button mat-stroked-button color="primary" type="button" (click)="dodajStavku()">
-              <mat-icon>add</mat-icon>
-              Dodaj parametar
-            </button>
-          </div>
-
-          <div class="stavka" *ngFor="let s of stavke.controls; let i = index" [formGroupName]="i">
-            <div class="red-polja">
-              <mat-form-field appearance="outline">
-                <mat-label>Parametar</mat-label>
-                <input matInput formControlName="parametar" />
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Organizam (opciono)</mat-label>
-                <mat-select formControlName="mikroorganizamId">
-                  <mat-option value="">—</mat-option>
-                  <mat-option *ngFor="let m of mikroorganizmi" [value]="m.id">{{ m.naziv }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div class="red-polja">
-              <mat-form-field appearance="outline">
-                <mat-label>Vrednost</mat-label>
-                <input matInput formControlName="vrednost" placeholder="npr 45 ili odsutna" />
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Jedinica</mat-label>
-                <input matInput formControlName="jedinica" />
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Granica</mat-label>
-                <input matInput formControlName="granica" />
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Status</mat-label>
-                <mat-select formControlName="status">
-                  <mat-option value="ispravan">ispravan</mat-option>
-                  <mat-option value="neispravan">neispravan</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <button mat-icon-button color="warn" type="button" (click)="ukloniStavku(i)" aria-label="Ukloni">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <p class="napomena">
-          <mat-icon class="mini">info</mat-icon>
-          Ukupna ocena se računa automatski — dovoljna je jedna neispravna stavka za NEISPRAVAN.
-        </p>
-
-        <div class="akcije">
-          <button mat-raised-button color="primary" type="submit" [disabled]="slanje">
-            <mat-icon>save</mat-icon>
-            Sačuvaj
-          </button>
-          <a mat-button routerLink="/analize">Odustani</a>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+      <div class="forma-akcije"><span>{{ uredjivanje ? 'Sačuvaj izmene rezultata.' : 'Analiza će biti povezana sa izabranim uzorkom.' }}</span><div><a mat-button routerLink="/analize">Odustani</a><button mat-raised-button color="primary" type="submit" [disabled]="slanje"><mat-icon>save</mat-icon>Sačuvaj</button></div></div>
+    </form>
+  </ng-container>
 </section>

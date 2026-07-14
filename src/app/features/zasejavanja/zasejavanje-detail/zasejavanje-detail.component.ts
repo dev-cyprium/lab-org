@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 
-import { Zasejavanje, Uzorak, Podloga, Mikroorganizam } from '../../../core/models';
+import { Zasejavanje, Uzorak, Podloga, Mikroorganizam, RezultatZasejavanja } from '../../../core/models';
 import { ZasejavanjaService } from '../../../core/services/zasejavanja.service';
 import { UzorciService } from '../../../core/services/uzorci.service';
 import { PodlogeService } from '../../../core/services/podloge.service';
@@ -51,6 +51,13 @@ export class ZasejavanjeDetailComponent implements OnInit {
       }
       this.ucitavanje = false;
     });
+  }
+
+  klasaRezultata(rezultat: RezultatZasejavanja): string {
+    if (rezultat === 'izraslo') return 'info';
+    if (rezultat === 'kontaminirano') return 'lose';
+    if (rezultat === 'u toku') return 'neutral';
+    return 'ok';
   }
 
   obrisi(): void {

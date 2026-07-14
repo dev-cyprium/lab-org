@@ -28,6 +28,14 @@ export class PodlogeListComponent implements OnInit {
     });
   }
 
+  get imaAktivneFiltere(): boolean { return !!this.pretraga.trim() || this.tipFilter !== 'sve'; }
+
+  ocistiFiltere(): void {
+    this.pretraga = '';
+    this.tipFilter = 'sve';
+    this.filtriraj();
+  }
+
   filtriraj(): void {
     const t = this.pretraga.trim().toLowerCase();
     this.prikazane = this.sve.filter((p) => {

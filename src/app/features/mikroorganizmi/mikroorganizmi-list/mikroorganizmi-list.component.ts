@@ -37,6 +37,14 @@ export class MikroorganizmiListComponent implements OnInit {
     });
   }
 
+  get imaAktivneFiltere(): boolean { return !!this.pretraga.trim() || this.tipFilter !== 'svi'; }
+
+  ocistiFiltere(): void {
+    this.pretraga = '';
+    this.tipFilter = 'svi';
+    this.filtriraj();
+  }
+
   // Filtrira po tekstu pretrage i izabranom tipu.
   filtriraj(): void {
     const t = this.pretraga.trim().toLowerCase();

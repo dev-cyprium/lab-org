@@ -1,57 +1,63 @@
-<section>
-  <header class="zaglavlje">
-    <h1>Zasejavanja</h1>
-    <p>Zasejavanje uzoraka na podloge i praćenje rasta.</p>
+<section class="operativni-red">
+  <header class="red-zaglavlje">
+    <div>
+      <span class="eyebrow">Mikrobiološki tok</span>
+      <h1>Zasejavanja</h1>
+      <p>Inkubacija, rast i evidencija kolonija po uzorku.</p>
+    </div>
+    <a mat-raised-button color="primary" routerLink="/zasejavanja/novo"><mat-icon>add</mat-icon>Novo zasejavanje</a>
   </header>
 
-  <div class="traka-akcija">
-    <a mat-raised-button color="primary" routerLink="/zasejavanja/novo">
-      <mat-icon>add</mat-icon>
-      Novo zasejavanje
+  <mat-card class="radna-traka">
+    <div class="rezultat-broj"><strong>{{ prikazana.length }}</strong><span>{{ prikazana.length === 1 ? 'zasejavanje' : 'zasejavanja' }}</span></div>
+    <div class="filteri-reda filteri-dva">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Pretraga</mat-label>
+        <input matInput [(ngModel)]="pretraga" (ngModelChange)="filtriraj()" placeholder="oznaka, uzorak, organizam..." />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Rezultat</mat-label>
+        <mat-select [(ngModel)]="rezultatFilter" (ngModelChange)="filtriraj()">
+          <mat-option value="svi">Svi rezultati</mat-option>
+          <mat-option *ngFor="let r of rezultati" [value]="r">{{ r }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="aktivni-filteri" *ngIf="imaAktivneFiltere">
+      <span>Aktivno:</span>
+      <button type="button" class="filter-chip" *ngIf="pretraga.trim()" (click)="ukloniPretragu()">„{{ pretraga }}” <mat-icon>close</mat-icon></button>
+      <button type="button" class="filter-chip" *ngIf="rezultatFilter !== 'svi'" (click)="ukloniRezultat()">{{ rezultatFilter }} <mat-icon>close</mat-icon></button>
+      <button mat-button type="button" (click)="ocistiFiltere()">Očisti sve</button>
+    </div>
+  </mat-card>
+
+  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
+  <div class="tabela-omot" *ngIf="!ucitavanje && prikazana.length">
+    <table mat-table [dataSource]="prikazana" class="tabela operativna-tabela">
+      <ng-container matColumnDef="oznaka"><th mat-header-cell *matHeaderCellDef>Oznaka</th><td mat-cell *matCellDef="let z"><strong>{{ z.oznaka }}</strong></td></ng-container>
+      <ng-container matColumnDef="uzorak"><th mat-header-cell *matHeaderCellDef>Uzorak</th><td mat-cell *matCellDef="let z"><span class="glavna-celija"><strong>{{ uzorci.get(z.uzorakId) || '—' }}</strong><small>{{ z.datumZasejavanja | datumSr }}</small></span></td></ng-container>
+      <ng-container matColumnDef="podloga"><th mat-header-cell *matHeaderCellDef>Podloga</th><td mat-cell *matCellDef="let z">{{ podloge.get(z.podlogaId) || '—' }}</td></ng-container>
+      <ng-container matColumnDef="organizam"><th mat-header-cell *matHeaderCellDef>Ciljni organizam</th><td mat-cell *matCellDef="let z">{{ mikroorganizmi.get(z.mikroorganizamId) || '—' }}</td></ng-container>
+      <ng-container matColumnDef="kolonije"><th mat-header-cell *matHeaderCellDef>Kolonije</th><td mat-cell *matCellDef="let z"><strong class="metrika">{{ z.brojKolonija | cfu: 'CFU' }}</strong></td></ng-container>
+      <ng-container matColumnDef="rezultat"><th mat-header-cell *matHeaderCellDef>Rezultat</th><td mat-cell *matCellDef="let z"><span class="oznaka" [ngClass]="klasaRezultata(z.rezultat)">{{ z.rezultat }}</span></td></ng-container>
+      <tr mat-header-row *matHeaderRowDef="kolone"></tr><tr mat-row *matRowDef="let red; columns: kolone" class="red" [routerLink]="['/zasejavanja', red.id]"></tr>
+    </table>
+  </div>
+
+  <div class="mobilni-operativni" *ngIf="!ucitavanje && prikazana.length">
+    <a class="mobilna-operativna-kartica" *ngFor="let z of prikazana" [routerLink]="['/zasejavanja', z.id]">
+      <span class="mobilni-vrh"><strong>{{ z.oznaka }}</strong><span class="oznaka" [ngClass]="klasaRezultata(z.rezultat)">{{ z.rezultat }}</span></span>
+      <span class="mobilni-naziv">{{ uzorci.get(z.uzorakId) || 'Nepoznat uzorak' }}</span>
+      <span class="mobilni-meta"><span><mat-icon>science</mat-icon>{{ mikroorganizmi.get(z.mikroorganizamId) || '—' }}</span><span><mat-icon>event</mat-icon>{{ z.datumZasejavanja | datumSr }}</span></span>
+      <span class="mobilni-poreklo">{{ podloge.get(z.podlogaId) || 'Nepoznata podloga' }} · {{ z.brojKolonija | cfu: 'CFU' }}</span>
     </a>
   </div>
 
-  <div class="filteri">
-    <mat-form-field appearance="outline">
-      <mat-label>Pretraga</mat-label>
-      <input matInput [(ngModel)]="pretraga" (ngModelChange)="filtriraj()" placeholder="oznaka, uzorak, organizam..." />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+  <div class="prazno-red" *ngIf="!ucitavanje && prikazana.length === 0">
+    <mat-icon>grain</mat-icon><h2>{{ imaAktivneFiltere ? 'Nema odgovarajućih zasejavanja' : 'Još nema zasejavanja' }}</h2>
+    <p>{{ imaAktivneFiltere ? 'Promeni ili ukloni aktivne filtere.' : 'Započni mikrobiološki tok iz odabranog uzorka.' }}</p>
+    <button mat-stroked-button *ngIf="imaAktivneFiltere" (click)="ocistiFiltere()">Očisti filtere</button>
+    <a mat-raised-button color="primary" *ngIf="!imaAktivneFiltere" routerLink="/zasejavanja/novo">Novo zasejavanje</a>
   </div>
-
-  <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
-
-  <table mat-table [dataSource]="prikazana" class="tabela" *ngIf="!ucitavanje">
-    <ng-container matColumnDef="oznaka">
-      <th mat-header-cell *matHeaderCellDef>Oznaka</th>
-      <td mat-cell *matCellDef="let z">{{ z.oznaka }}</td>
-    </ng-container>
-    <ng-container matColumnDef="uzorak">
-      <th mat-header-cell *matHeaderCellDef>Uzorak</th>
-      <td mat-cell *matCellDef="let z">{{ uzorci.get(z.uzorakId) }}</td>
-    </ng-container>
-    <ng-container matColumnDef="podloga">
-      <th mat-header-cell *matHeaderCellDef>Podloga</th>
-      <td mat-cell *matCellDef="let z">{{ podloge.get(z.podlogaId) }}</td>
-    </ng-container>
-    <ng-container matColumnDef="organizam">
-      <th mat-header-cell *matHeaderCellDef>Ciljni organizam</th>
-      <td mat-cell *matCellDef="let z">{{ mikroorganizmi.get(z.mikroorganizamId) }}</td>
-    </ng-container>
-    <ng-container matColumnDef="kolonije">
-      <th mat-header-cell *matHeaderCellDef>Kolonije</th>
-      <td mat-cell *matCellDef="let z">{{ z.brojKolonija | cfu: 'CFU' }}</td>
-    </ng-container>
-    <ng-container matColumnDef="rezultat">
-      <th mat-header-cell *matHeaderCellDef>Rezultat</th>
-      <td mat-cell *matCellDef="let z">
-        <span class="oznaka" [ngClass]="klasaRezultata(z.rezultat)">{{ z.rezultat }}</span>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="kolone"></tr>
-    <tr mat-row *matRowDef="let red; columns: kolone" class="red" [routerLink]="['/zasejavanja', red.id]"></tr>
-  </table>
-
-  <p class="prazno" *ngIf="!ucitavanje && prikazana.length === 0">Nema zasejavanja koja odgovaraju pretrazi.</p>
 </section>

@@ -1,53 +1,43 @@
-<section class="detalj">
-  <a mat-button routerLink="/zasejavanja">
-    <mat-icon>arrow_back</mat-icon>
-    Nazad na zasejavanja
-  </a>
-
+<section class="operativni-detalj">
+  <a mat-button class="nazad-link" routerLink="/zasejavanja"><mat-icon>arrow_back</mat-icon>Nazad na zasejavanja</a>
   <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
 
   <ng-container *ngIf="!ucitavanje">
-    <mat-card *ngIf="zasejavanje as z; else nemaGa" class="kartica-detalj">
-      <div class="traka-akcija">
-        <a mat-stroked-button color="primary" [routerLink]="['/zasejavanja', z.id, 'izmena']">
-          <mat-icon>edit</mat-icon>
-          Izmeni
-        </a>
-        <button mat-stroked-button color="warn" (click)="obrisi()">
-          <mat-icon>delete</mat-icon>
-          Obriši
-        </button>
-      </div>
-      <mat-card-header>
-        <mat-icon mat-card-avatar>grain</mat-icon>
-        <mat-card-title>{{ z.oznaka }}</mat-card-title>
-        <mat-card-subtitle>{{ z.datumZasejavanja | datumSr }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="polja">
-          <div class="polje">
-            <span class="oznaka-polja">Uzorak</span>
-            <a *ngIf="uzorak" [routerLink]="['/uzorci', uzorak.id]">{{ uzorak.naziv }}</a>
-            <span *ngIf="!uzorak">—</span>
-          </div>
-          <div class="polje">
-            <span class="oznaka-polja">Podloga</span>
-            <a *ngIf="podloga" [routerLink]="['/podloge', podloga.id]">{{ podloga.naziv }}</a>
-            <span *ngIf="!podloga">—</span>
-          </div>
-          <div class="polje">
-            <span class="oznaka-polja">Ciljni organizam</span>
-            <a *ngIf="mikroorganizam" [routerLink]="['/mikroorganizmi', mikroorganizam.id]">{{ mikroorganizam.naziv }}</a>
-            <span *ngIf="!mikroorganizam">—</span>
-          </div>
-          <div class="polje"><span class="oznaka-polja">Temperatura</span><span>{{ z.temperatura }} °C</span></div>
-          <div class="polje"><span class="oznaka-polja">Vreme inkubacije</span><span>{{ z.vremeInkubacije }} h</span></div>
-          <div class="polje"><span class="oznaka-polja">Broj kolonija</span><span>{{ z.brojKolonija | cfu: 'CFU' }}</span></div>
-          <div class="polje"><span class="oznaka-polja">Rezultat</span><span>{{ z.rezultat }}</span></div>
+    <ng-container *ngIf="zasejavanje as z; else nemaGa">
+      <header class="detalj-zaglavlje">
+        <div class="identitet">
+          <span class="sifra">INKUBACIONI ZAPIS</span>
+          <div class="naslov-red"><h1>{{ z.oznaka }}</h1><span class="oznaka" [ngClass]="klasaRezultata(z.rezultat)">{{ z.rezultat }}</span></div>
+          <p>{{ z.datumZasejavanja | datumSr }} · {{ mikroorganizam?.naziv || 'ciljni organizam nije naveden' }}</p>
         </div>
-      </mat-card-content>
-    </mat-card>
+        <div class="detalj-akcije">
+          <a mat-stroked-button color="primary" [routerLink]="['/zasejavanja', z.id, 'izmena']"><mat-icon>edit</mat-icon>Izmeni</a>
+          <button mat-stroked-button color="warn" (click)="obrisi()"><mat-icon>delete</mat-icon>Obriši</button>
+        </div>
+      </header>
 
-    <ng-template #nemaGa><p class="prazno">Zasejavanje ne postoji.</p></ng-template>
+      <div class="rezultat-panel" [ngClass]="klasaRezultata(z.rezultat)">
+        <mat-icon>{{ z.rezultat === 'u toku' ? 'hourglass_top' : z.rezultat === 'kontaminirano' ? 'warning' : 'biotech' }}</mat-icon>
+        <div><span>Rezultat inkubacije</span><strong>{{ z.rezultat }}</strong></div>
+        <strong class="metrika">{{ z.brojKolonija | cfu: 'CFU' }}</strong>
+      </div>
+
+      <div class="metrike-red">
+        <div class="metrika-kartica"><span>Temperatura</span><strong>{{ z.temperatura }} °C</strong></div>
+        <div class="metrika-kartica"><span>Vreme inkubacije</span><strong>{{ z.vremeInkubacije }} h</strong></div>
+        <div class="metrika-kartica"><span>Broj kolonija</span><strong>{{ z.brojKolonija | cfu: 'CFU' }}</strong></div>
+      </div>
+
+      <mat-card class="pregled-kartica">
+        <div class="sekcija-zaglavlje"><div><span class="eyebrow">Povezani materijal</span><h2>Postavka zasejavanja</h2></div><mat-icon>grain</mat-icon></div>
+        <div class="pregled-polja">
+          <div><span>Uzorak</span><a *ngIf="uzorak" [routerLink]="['/uzorci', uzorak.id]">{{ uzorak.naziv }} ({{ uzorak.sifra }})</a><strong *ngIf="!uzorak">—</strong></div>
+          <div><span>Podloga</span><a *ngIf="podloga" [routerLink]="['/podloge', podloga.id]">{{ podloga.naziv }}</a><strong *ngIf="!podloga">—</strong></div>
+          <div><span>Ciljni organizam</span><a *ngIf="mikroorganizam" [routerLink]="['/mikroorganizmi', mikroorganizam.id]">{{ mikroorganizam.naziv }}</a><strong *ngIf="!mikroorganizam">—</strong></div>
+          <div><span>Datum zasejavanja</span><strong>{{ z.datumZasejavanja | datumSr }}</strong></div>
+        </div>
+      </mat-card>
+    </ng-container>
+    <ng-template #nemaGa><div class="prazno-red"><mat-icon>search_off</mat-icon><h2>Zasejavanje ne postoji</h2><p>Vrati se na listu i izaberi drugi zapis.</p><a mat-stroked-button routerLink="/zasejavanja">Nazad na zasejavanja</a></div></ng-template>
   </ng-container>
 </section>

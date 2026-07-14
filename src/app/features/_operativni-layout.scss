@@ -1,0 +1,209 @@
+.operativni-red,
+.operativni-detalj,
+.operativna-forma-strana,
+.registar-strana {
+  max-width: 1120px;
+}
+
+.registar-traka {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.registar-sazetak {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: -0.25rem 0 1rem;
+  color: var(--laborg-text-muted);
+
+  strong { color: var(--laborg-navy); font-size: 1.6rem; }
+}
+
+.filteri-reda.filteri-dva {
+  grid-template-columns: minmax(240px, 1fr) minmax(180px, 0.35fr);
+}
+
+.operativna-tabela {
+  .mat-mdc-cell {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .glavna-celija {
+    display: flex;
+    flex-direction: column;
+
+    small {
+      max-width: 320px;
+      overflow: hidden;
+      margin-top: 0.15rem;
+      color: var(--laborg-text-muted);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+
+.metrika {
+  color: var(--laborg-navy);
+  font-variant-numeric: tabular-nums;
+}
+
+.mobilni-operativni {
+  display: none;
+}
+
+.mobilna-operativna-kartica {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  color: var(--laborg-text);
+  text-decoration: none;
+  background: var(--laborg-surface);
+  border: 1px solid var(--laborg-border);
+  border-radius: var(--laborg-radius-md);
+  box-shadow: var(--laborg-shadow-sm);
+}
+
+.rezultat-panel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--laborg-border);
+  border-radius: var(--laborg-radius-md);
+
+  > mat-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+  }
+
+  > div {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  span {
+    color: var(--laborg-text-muted);
+    font-size: 0.72rem;
+  }
+
+  strong {
+    margin-top: 0.1rem;
+    color: var(--laborg-navy);
+    font-size: 1.15rem;
+  }
+
+  &.ok {
+    color: var(--laborg-success);
+    background: var(--laborg-success-soft);
+    border-color: color-mix(in srgb, var(--laborg-success) 24%, transparent);
+  }
+
+  &.lose {
+    color: var(--laborg-critical);
+    background: var(--laborg-critical-soft);
+    border-color: color-mix(in srgb, var(--laborg-critical) 24%, transparent);
+  }
+
+  &.info {
+    color: var(--laborg-info);
+    background: var(--laborg-info-soft);
+  }
+
+  &.neutral {
+    color: var(--laborg-text-muted);
+    background: var(--laborg-surface-tinted);
+  }
+}
+
+.metrike-red {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.metrika-kartica {
+  padding: 1rem;
+  background: var(--laborg-surface);
+  border: 1px solid var(--laborg-border);
+  border-radius: var(--laborg-radius-md);
+
+  span {
+    display: block;
+    color: var(--laborg-text-muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  strong {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--laborg-navy);
+    font-size: 1.15rem;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.parametri-kartica {
+  margin-top: 1rem;
+  padding: 1.25rem;
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.forma-sekcija {
+  padding: 1.25rem;
+
+  & + & {
+    margin-top: 1rem;
+  }
+}
+
+.sekcija-opis {
+  margin: 0.25rem 0 1.15rem;
+  color: var(--laborg-text-muted);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 760px) {
+  .operativna-tabela {
+    display: none;
+  }
+
+  .mobilni-operativni {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .metrike-red {
+    grid-template-columns: 1fr;
+  }
+
+  .registar-traka {
+    grid-template-columns: auto 1fr;
+
+    > button { grid-column: 1 / -1; justify-self: end; }
+  }
+}
+
+@media (max-width: 640px) {
+  .filteri-reda.filteri-dva,
+  .mobilni-operativni {
+    grid-template-columns: 1fr;
+  }
+}

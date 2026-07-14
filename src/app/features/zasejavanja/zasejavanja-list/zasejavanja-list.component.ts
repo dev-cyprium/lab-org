@@ -21,6 +21,8 @@ export class ZasejavanjaListComponent implements OnInit {
   mikroorganizmi = new Map<string, string>();
 
   pretraga = '';
+  rezultatFilter: RezultatZasejavanja | 'svi' = 'svi';
+  rezultati: RezultatZasejavanja[] = ['u toku', 'izraslo', 'nije izraslo', 'kontaminirano'];
   ucitavanje = true;
   kolone = ['oznaka', 'uzorak', 'podloga', 'organizam', 'kolonije', 'rezultat'];
 
@@ -41,10 +43,30 @@ export class ZasejavanjaListComponent implements OnInit {
       r.uzorci.forEach((u) => this.uzorci.set(u.id, u.naziv));
       r.podloge.forEach((p) => this.podloge.set(p.id, p.naziv));
       r.mikroorganizmi.forEach((m) => this.mikroorganizmi.set(m.id, m.naziv));
-      this.sva = r.zasejavanja;
-      this.prikazana = r.zasejavanja;
+      this.sva = [...r.zasejavanja].sort((a, b) => b.datumZasejavanja.localeCompare(a.datumZasejavanja));
+      this.prikazana = this.sva;
       this.ucitavanje = false;
     });
+  }
+
+  get imaAktivneFiltere(): boolean {
+    return !!this.pretraga.trim() || this.rezultatFilter !== 'svi';
+  }
+
+  ukloniPretragu(): void {
+    this.pretraga = '';
+    this.filtriraj();
+  }
+
+  ukloniRezultat(): void {
+    this.rezultatFilter = 'svi';
+    this.filtriraj();
+  }
+
+  ocistiFiltere(): void {
+    this.pretraga = '';
+    this.rezultatFilter = 'svi';
+    this.filtriraj();
   }
 
   filtriraj(): void {
@@ -52,7 +74,9 @@ export class ZasejavanjaListComponent implements OnInit {
     this.prikazana = this.sva.filter((z) => {
       const uzorak = (this.uzorci.get(z.uzorakId) ?? '').toLowerCase();
       const organizam = (this.mikroorganizmi.get(z.mikroorganizamId) ?? '').toLowerCase();
-      return !t || z.oznaka.toLowerCase().includes(t) || uzorak.includes(t) || organizam.includes(t);
+      const odgovaraTekst = !t || z.oznaka.toLowerCase().includes(t) || uzorak.includes(t) || organizam.includes(t);
+      const odgovaraRezultat = this.rezultatFilter === 'svi' || z.rezultat === this.rezultatFilter;
+      return odgovaraTekst && odgovaraRezultat;
     });
   }
 

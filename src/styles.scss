@@ -2,6 +2,7 @@
 @use 'sass:map';
 @use './app/features/dashboard/dashboard-layout';
 @use './app/features/uzorci/uzorci-layout';
+@use './app/features/operativni-layout';
 
 @include mat.core();
 

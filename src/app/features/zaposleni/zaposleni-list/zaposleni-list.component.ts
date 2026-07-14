@@ -39,6 +39,14 @@ export class ZaposleniListComponent implements OnInit {
     });
   }
 
+  get imaAktivneFiltere(): boolean { return !!this.pretraga.trim() || this.pozicijaFilter !== 'sve'; }
+
+  ocistiFiltere(): void {
+    this.pretraga = '';
+    this.pozicijaFilter = 'sve';
+    this.filtriraj();
+  }
+
   filtriraj(): void {
     const t = this.pretraga.trim().toLowerCase();
     this.prikazani = this.svi.filter((z) => {

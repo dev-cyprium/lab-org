@@ -1,17 +1,12 @@
-<section>
-  <header class="zaglavlje">
-    <h1>Podloge i reagensi</h1>
-    <p>Hranljive podloge, reagensi i hemikalije u laboratoriji. Opasne stavke su istaknute.</p>
+<section class="registar-strana">
+  <header class="red-zaglavlje">
+    <div><span class="eyebrow">Materijali</span><h1>Podloge i reagensi</h1>
+    <p>Raspoloživost, namena, rok trajanja i bezbednosna klasa.</p></div>
+    <a mat-raised-button color="primary" routerLink="/podloge/novo"><mat-icon>add</mat-icon>Nova podloga</a>
   </header>
-
-  <div class="traka-akcija">
-    <a mat-raised-button color="primary" routerLink="/podloge/novo">
-      <mat-icon>add</mat-icon>
-      Nova podloga
-    </a>
-  </div>
-
-  <div class="filteri">
+  <mat-card class="registar-traka">
+    <div class="rezultat-broj"><strong>{{ prikazane.length }}</strong><span>stavki</span></div>
+    <div class="filteri-reda filteri-dva">
     <mat-form-field appearance="outline">
       <mat-label>Pretraga</mat-label>
       <input matInput [(ngModel)]="pretraga" (ngModelChange)="filtriraj()" placeholder="naziv, namena..." />
@@ -24,8 +19,9 @@
         <mat-option value="sve">Svi tipovi</mat-option>
         <mat-option *ngFor="let t of tipovi" [value]="t">{{ t }}</mat-option>
       </mat-select>
-    </mat-form-field>
-  </div>
+    </mat-form-field></div>
+    <button mat-button *ngIf="imaAktivneFiltere" (click)="ocistiFiltere()">Očisti filtere</button>
+  </mat-card>
 
   <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
 
@@ -51,5 +47,5 @@
     </mat-card>
   </div>
 
-  <p class="prazno" *ngIf="!ucitavanje && prikazane.length === 0">Nema podloga koje odgovaraju pretrazi.</p>
+  <div class="prazno-red" *ngIf="!ucitavanje && prikazane.length === 0"><mat-icon>inventory_2</mat-icon><h2>Nema odgovarajućih materijala</h2><p>Promeni ili ukloni aktivne filtere.</p><button mat-stroked-button (click)="ocistiFiltere()">Očisti filtere</button></div>
 </section>

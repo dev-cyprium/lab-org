@@ -1,15 +1,10 @@
-<section>
-  <header class="zaglavlje">
-    <h1>Laboratorije</h1>
-    <p>Organizacione jedinice laboratorije.</p>
+<section class="registar-strana">
+  <header class="red-zaglavlje">
+    <div><span class="eyebrow">Organizacija</span><h1>Laboratorije</h1>
+    <p>Organizacione jedinice, lokacije i odgovorne osobe.</p></div>
+    <a mat-raised-button color="primary" routerLink="/laboratorije/novo"><mat-icon>add_business</mat-icon>Nova laboratorija</a>
   </header>
-
-  <div class="traka-akcija">
-    <a mat-raised-button color="primary" routerLink="/laboratorije/novo">
-      <mat-icon>add</mat-icon>
-      Nova laboratorija
-    </a>
-  </div>
+  <div class="registar-sazetak"><strong>{{ laboratorije.length }}</strong><span>{{ laboratorije.length === 1 ? 'organizaciona jedinica' : 'organizacione jedinice' }}</span></div>
 
   <div class="spinner" *ngIf="ucitavanje">
     <mat-spinner diameter="40"></mat-spinner>

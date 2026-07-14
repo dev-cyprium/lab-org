@@ -29,10 +29,30 @@ export class AnalizeListComponent implements OnInit {
       uzorci: this.uzorciServis.ucitajSve(),
     }).subscribe(({ analize, uzorci }) => {
       uzorci.forEach((u) => this.uzorci.set(u.id, u.naziv));
-      this.sve = analize;
-      this.prikazane = analize;
+      this.sve = [...analize].sort((a, b) => b.datumAnalize.localeCompare(a.datumAnalize));
+      this.prikazane = this.sve;
       this.ucitavanje = false;
     });
+  }
+
+  get imaAktivneFiltere(): boolean {
+    return !!this.pretraga.trim() || this.ocenaFilter !== 'sve';
+  }
+
+  ukloniPretragu(): void {
+    this.pretraga = '';
+    this.filtriraj();
+  }
+
+  ukloniOcenu(): void {
+    this.ocenaFilter = 'sve';
+    this.filtriraj();
+  }
+
+  ocistiFiltere(): void {
+    this.pretraga = '';
+    this.ocenaFilter = 'sve';
+    this.filtriraj();
   }
 
   filtriraj(): void {

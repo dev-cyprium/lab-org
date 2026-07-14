@@ -1,17 +1,12 @@
-<section>
-  <header class="zaglavlje">
-    <h1>Zaposleni</h1>
-    <p>Osoblje laboratorije — uzorkovači, laboranti, analitičari i rukovodstvo.</p>
+<section class="registar-strana">
+  <header class="red-zaglavlje">
+    <div><span class="eyebrow">Tim i odgovornosti</span><h1>Zaposleni</h1>
+    <p>Osoblje laboratorije, uloge i pripadnost organizacionim jedinicama.</p></div>
+    <a mat-raised-button color="primary" routerLink="/zaposleni/novo"><mat-icon>person_add</mat-icon>Novi zaposleni</a>
   </header>
-
-  <div class="traka-akcija">
-    <a mat-raised-button color="primary" routerLink="/zaposleni/novo">
-      <mat-icon>add</mat-icon>
-      Novi zaposleni
-    </a>
-  </div>
-
-  <div class="filteri">
+  <mat-card class="registar-traka">
+    <div class="rezultat-broj"><strong>{{ prikazani.length }}</strong><span>članova</span></div>
+    <div class="filteri-reda filteri-dva">
     <mat-form-field appearance="outline">
       <mat-label>Pretraga</mat-label>
       <input matInput appAutoFocus [(ngModel)]="pretraga" (ngModelChange)="filtriraj()" placeholder="ime, email..." />
@@ -24,8 +19,9 @@
         <mat-option value="sve">Sve pozicije</mat-option>
         <mat-option *ngFor="let p of pozicije" [value]="p">{{ p }}</mat-option>
       </mat-select>
-    </mat-form-field>
-  </div>
+    </mat-form-field></div>
+    <button mat-button *ngIf="imaAktivneFiltere" (click)="ocistiFiltere()">Očisti filtere</button>
+  </mat-card>
 
   <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
 
@@ -55,5 +51,5 @@
     <tr mat-row *matRowDef="let red; columns: kolone" class="red" [routerLink]="['/zaposleni', red.id]"></tr>
   </table>
 
-  <p class="prazno" *ngIf="!ucitavanje && prikazani.length === 0">Nema zaposlenih koji odgovaraju pretrazi.</p>
+  <div class="prazno-red" *ngIf="!ucitavanje && prikazani.length === 0"><mat-icon>groups</mat-icon><h2>Nema odgovarajućih zaposlenih</h2><p>Promeni ili ukloni aktivne filtere.</p><button mat-stroked-button (click)="ocistiFiltere()">Očisti filtere</button></div>
 </section>

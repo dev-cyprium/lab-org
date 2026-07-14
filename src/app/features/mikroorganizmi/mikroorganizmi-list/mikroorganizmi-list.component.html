@@ -1,10 +1,11 @@
-<section class="lista">
-  <header class="zaglavlje">
-    <h1>Katalog mikroorganizama</h1>
-    <p>Patogeni, indikatorski i kvarljivci koji se prate u laboratoriji.</p>
+<section class="registar-strana">
+  <header class="red-zaglavlje">
+    <div><span class="eyebrow">Referentni katalog</span><h1>Mikroorganizmi</h1>
+    <p>Patogeni, indikatorski organizmi i kvarljivci koje laboratorija prati.</p></div>
   </header>
-
-  <div class="filteri">
+  <mat-card class="registar-traka">
+    <div class="rezultat-broj"><strong>{{ prikazani.length }}</strong><span>organizama</span></div>
+    <div class="filteri-reda filteri-dva">
     <mat-form-field appearance="outline">
       <mat-label>Pretraga</mat-label>
       <input
@@ -22,8 +23,9 @@
         <mat-option value="svi">Svi tipovi</mat-option>
         <mat-option *ngFor="let t of tipovi" [value]="t">{{ t }}</mat-option>
       </mat-select>
-    </mat-form-field>
-  </div>
+    </mat-form-field></div>
+    <button mat-button *ngIf="imaAktivneFiltere" (click)="ocistiFiltere()">Očisti filtere</button>
+  </mat-card>
 
   <div class="spinner" *ngIf="ucitavanje">
     <mat-spinner diameter="40"></mat-spinner>
@@ -68,7 +70,5 @@
     ></tr>
   </table>
 
-  <p class="prazno" *ngIf="!ucitavanje && !greska && prikazani.length === 0">
-    Nema mikroorganizama koji odgovaraju pretrazi.
-  </p>
+  <div class="prazno-red" *ngIf="!ucitavanje && !greska && prikazani.length === 0"><mat-icon>coronavirus</mat-icon><h2>Nema odgovarajućih organizama</h2><p>Promeni ili ukloni aktivne filtere.</p><button mat-stroked-button (click)="ocistiFiltere()">Očisti filtere</button></div>
 </section>
