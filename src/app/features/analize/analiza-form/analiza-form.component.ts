@@ -8,6 +8,7 @@ import { UzorciService } from '../../../core/services/uzorci.service';
 import { ZaposleniService } from '../../../core/services/zaposleni.service';
 import { MikroorganizmiService } from '../../../core/services/mikroorganizmi.service';
 import { NotifikacijaService } from '../../../core/services/notifikacija.service';
+import { danasIsoDatum } from '../../../shared/utils/datum';
 
 @Component({
   selector: 'app-analiza-form',
@@ -53,6 +54,8 @@ export class AnalizaFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const uzorakId = this.route.snapshot.queryParamMap.get('uzorakId');
+    if (uzorakId) this.forma.patchValue({ uzorakId });
     this.uzorciServis.ucitajSve().subscribe((u) => (this.uzorci = u));
     this.zaposleniServis.ucitajSve().subscribe((z) => (this.zaposleni = z));
     this.mikroorganizmiServis.ucitajSve().subscribe((m) => (this.mikroorganizmi = m));
@@ -68,8 +71,13 @@ export class AnalizaFormComponent implements OnInit {
         this.ucitavanje = false;
       });
     } else {
+      this.forma.patchValue({ datumAnalize: danasIsoDatum() });
       this.dodajStavku(); // nova analiza kreće sa jednom praznom stavkom
     }
+  }
+
+  postaviDanas(): void {
+    this.forma.controls.datumAnalize.setValue(danasIsoDatum());
   }
 
   napraviStavku(s?: StavkaAnalize): FormGroup {

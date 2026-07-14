@@ -25,10 +25,36 @@ export class UzorciListComponent implements OnInit {
 
   ngOnInit(): void {
     this.servis.ucitajSve().subscribe((lista) => {
-      this.svi = lista;
-      this.prikazani = lista;
+      this.svi = [...lista].sort((a, b) => b.datumPrijema.localeCompare(a.datumPrijema));
+      this.prikazani = this.svi;
       this.ucitavanje = false;
     });
+  }
+
+  get imaAktivneFiltere(): boolean {
+    return !!this.pretraga.trim() || this.statusFilter !== 'svi' || this.vrstaFilter !== 'sve';
+  }
+
+  ukloniPretragu(): void {
+    this.pretraga = '';
+    this.filtriraj();
+  }
+
+  ukloniStatus(): void {
+    this.statusFilter = 'svi';
+    this.filtriraj();
+  }
+
+  ukloniVrstu(): void {
+    this.vrstaFilter = 'sve';
+    this.filtriraj();
+  }
+
+  ocistiFiltere(): void {
+    this.pretraga = '';
+    this.statusFilter = 'svi';
+    this.vrstaFilter = 'sve';
+    this.filtriraj();
   }
 
   filtriraj(): void {
@@ -47,6 +73,7 @@ export class UzorciListComponent implements OnInit {
   klasaStatusa(status: StatusUzorka): string {
     if (status === 'završen') return 'ok';
     if (status === 'arhiviran') return 'neutral';
+    if (status === 'u analizi') return 'upozorenje';
     return 'info';
   }
 }

@@ -45,11 +45,14 @@
         </div>
 
         <div class="red-polja">
-          <mat-form-field appearance="outline">
-            <mat-label>Datum zasejavanja</mat-label>
-            <input matInput type="date" formControlName="datumZasejavanja" />
-            <mat-error *ngIf="forma.get('datumZasejavanja')?.hasError('required')">Obavezno polje.</mat-error>
-          </mat-form-field>
+          <div class="datum-polje">
+            <mat-form-field appearance="outline">
+              <mat-label>Datum zasejavanja</mat-label>
+              <input matInput type="date" formControlName="datumZasejavanja" />
+              <mat-error *ngIf="forma.get('datumZasejavanja')?.hasError('required')">Obavezno polje.</mat-error>
+            </mat-form-field>
+            <button mat-button type="button" class="datum-danas" (click)="postaviDanas()">Danas</button>
+          </div>
 
           <mat-form-field appearance="outline">
             <mat-label>Temperatura (°C)</mat-label>

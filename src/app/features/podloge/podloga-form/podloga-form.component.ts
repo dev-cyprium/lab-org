@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TipPodloge, KlasaOpasnosti, KLASE_OPASNOSTI } from '../../../core/models';
 import { PodlogeService } from '../../../core/services/podloge.service';
 import { NotifikacijaService } from '../../../core/services/notifikacija.service';
+import { danasIsoDatum } from '../../../shared/utils/datum';
 
 @Component({
   selector: 'app-podloga-form',
@@ -54,6 +55,10 @@ export class PodlogaFormComponent implements OnInit {
         this.ucitavanje = false;
       });
     }
+  }
+
+  postaviDanas(): void {
+    this.forma.controls.datumIsteka.setValue(danasIsoDatum());
   }
 
   async sacuvaj(): Promise<void> {

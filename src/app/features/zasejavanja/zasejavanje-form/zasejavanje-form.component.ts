@@ -8,6 +8,7 @@ import { UzorciService } from '../../../core/services/uzorci.service';
 import { PodlogeService } from '../../../core/services/podloge.service';
 import { MikroorganizmiService } from '../../../core/services/mikroorganizmi.service';
 import { NotifikacijaService } from '../../../core/services/notifikacija.service';
+import { danasIsoDatum } from '../../../shared/utils/datum';
 
 @Component({
   selector: 'app-zasejavanje-form',
@@ -51,6 +52,8 @@ export class ZasejavanjeFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const uzorakId = this.route.snapshot.queryParamMap.get('uzorakId');
+    if (uzorakId) this.forma.patchValue({ uzorakId });
     this.uzorciServis.ucitajSve().subscribe((u) => (this.uzorci = u));
     this.podlogeServis.ucitajSve().subscribe((p) => (this.podloge = p));
     this.mikroorganizmiServis.ucitajSve().subscribe((m) => (this.mikroorganizmi = m));
@@ -64,7 +67,13 @@ export class ZasejavanjeFormComponent implements OnInit {
         }
         this.ucitavanje = false;
       });
+    } else {
+      this.forma.patchValue({ datumZasejavanja: danasIsoDatum() });
     }
+  }
+
+  postaviDanas(): void {
+    this.forma.controls.datumZasejavanja.setValue(danasIsoDatum());
   }
 
   async sacuvaj(): Promise<void> {

@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 @use './app/features/dashboard/dashboard-layout';
+@use './app/features/uzorci/uzorci-layout';
 
 @include mat.core();
 
@@ -477,6 +478,33 @@ mat-card {
 
 .mat-mdc-button-base:focus-visible {
   box-shadow: var(--laborg-focus) !important;
+}
+
+.datum-danas {
+  min-width: auto !important;
+  height: 28px !important;
+  padding: 0 0.45rem !important;
+  color: var(--laborg-primary-dark) !important;
+  background: var(--laborg-primary-soft) !important;
+  border-radius: 999px !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+}
+
+.datum-polje {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .datum-danas {
+    align-self: flex-end;
+    margin: 0.05rem 0 0.35rem;
+  }
 }
 
 .mat-mdc-table .mat-mdc-row {

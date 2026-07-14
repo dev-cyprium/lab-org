@@ -6,6 +6,7 @@ import { Pozicija, POZICIJE, Laboratorija } from '../../../core/models';
 import { ZaposleniService } from '../../../core/services/zaposleni.service';
 import { LaboratorijeService } from '../../../core/services/laboratorije.service';
 import { NotifikacijaService } from '../../../core/services/notifikacija.service';
+import { danasIsoDatum } from '../../../shared/utils/datum';
 
 @Component({
   selector: 'app-zaposleni-form',
@@ -56,7 +57,13 @@ export class ZaposleniFormComponent implements OnInit {
         }
         this.ucitavanje = false;
       });
+    } else {
+      this.forma.patchValue({ datumZaposlenja: danasIsoDatum() });
     }
+  }
+
+  postaviDanas(): void {
+    this.forma.controls.datumZaposlenja.setValue(danasIsoDatum());
   }
 
   async sacuvaj(): Promise<void> {

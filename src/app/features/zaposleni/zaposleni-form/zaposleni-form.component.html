@@ -61,11 +61,14 @@
             <mat-error *ngIf="forma.get('laboratorijaId')?.hasError('required')">Izaberi laboratoriju.</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Datum zaposlenja</mat-label>
-            <input matInput type="date" formControlName="datumZaposlenja" />
-            <mat-error *ngIf="forma.get('datumZaposlenja')?.hasError('required')">Obavezno polje.</mat-error>
-          </mat-form-field>
+          <div class="datum-polje">
+            <mat-form-field appearance="outline">
+              <mat-label>Datum zaposlenja</mat-label>
+              <input matInput type="date" formControlName="datumZaposlenja" />
+              <mat-error *ngIf="forma.get('datumZaposlenja')?.hasError('required')">Obavezno polje.</mat-error>
+            </mat-form-field>
+            <button mat-button type="button" class="datum-danas" (click)="postaviDanas()">Danas</button>
+          </div>
         </div>
 
         <mat-checkbox formControlName="aktivan">Aktivan</mat-checkbox>

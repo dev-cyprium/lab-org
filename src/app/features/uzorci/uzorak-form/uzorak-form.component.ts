@@ -14,6 +14,7 @@ import { UzorciService } from '../../../core/services/uzorci.service';
 import { ZaposleniService } from '../../../core/services/zaposleni.service';
 import { LaboratorijeService } from '../../../core/services/laboratorije.service';
 import { NotifikacijaService } from '../../../core/services/notifikacija.service';
+import { danasIsoDatum } from '../../../shared/utils/datum';
 
 @Component({
   selector: 'app-uzorak-form',
@@ -72,7 +73,14 @@ export class UzorakFormComponent implements OnInit {
         }
         this.ucitavanje = false;
       });
+    } else {
+      const danas = danasIsoDatum();
+      this.forma.patchValue({ datumUzorkovanja: danas, datumPrijema: danas });
     }
+  }
+
+  postaviDanas(polje: 'datumUzorkovanja' | 'datumPrijema'): void {
+    this.forma.controls[polje].setValue(danasIsoDatum());
   }
 
   async sacuvaj(): Promise<void> {

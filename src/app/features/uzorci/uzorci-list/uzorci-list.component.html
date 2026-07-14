@@ -1,69 +1,120 @@
-<section>
-  <header class="zaglavlje">
-    <h1>Uzorci</h1>
-    <p>Prijem i praćenje uzoraka hrane, vode i briseva.</p>
-  </header>
-
-  <div class="traka-akcija">
+<section class="uzorci-red">
+  <header class="red-zaglavlje">
+    <div>
+      <span class="eyebrow">Radni proces</span>
+      <h1>Uzorci</h1>
+      <p>Prijem i praćenje uzoraka hrane, vode i briseva.</p>
+    </div>
     <a mat-raised-button color="primary" routerLink="/uzorci/novo">
       <mat-icon>add</mat-icon>
       Novi uzorak
     </a>
-  </div>
+  </header>
 
-  <div class="filteri">
-    <mat-form-field appearance="outline">
-      <mat-label>Pretraga</mat-label>
-      <input matInput [(ngModel)]="pretraga" (ngModelChange)="filtriraj()" placeholder="šifra, naziv, poreklo..." />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+  <mat-card class="radna-traka">
+    <div class="rezultat-broj">
+      <strong>{{ prikazani.length }}</strong>
+      <span>{{ prikazani.length === 1 ? 'uzorak' : 'uzoraka' }}</span>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Status</mat-label>
-      <mat-select [(ngModel)]="statusFilter" (ngModelChange)="filtriraj()">
-        <mat-option value="svi">Svi statusi</mat-option>
-        <mat-option *ngFor="let s of statusi" [value]="s">{{ s }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="filteri-reda">
+      <mat-form-field appearance="outline" class="pretraga-polje" subscriptSizing="dynamic">
+        <mat-label>Pretraga</mat-label>
+        <input
+          matInput
+          [(ngModel)]="pretraga"
+          (ngModelChange)="filtriraj()"
+          placeholder="šifra, naziv, poreklo..."
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Vrsta</mat-label>
-      <mat-select [(ngModel)]="vrstaFilter" (ngModelChange)="filtriraj()">
-        <mat-option value="sve">Sve vrste</mat-option>
-        <mat-option *ngFor="let v of vrste" [value]="v">{{ v }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="statusFilter" (ngModelChange)="filtriraj()">
+          <mat-option value="svi">Svi statusi</mat-option>
+          <mat-option *ngFor="let s of statusi" [value]="s">{{ s }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Vrsta</mat-label>
+        <mat-select [(ngModel)]="vrstaFilter" (ngModelChange)="filtriraj()">
+          <mat-option value="sve">Sve vrste</mat-option>
+          <mat-option *ngFor="let v of vrste" [value]="v">{{ v }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="aktivni-filteri" *ngIf="imaAktivneFiltere">
+      <span>Aktivno:</span>
+      <button type="button" class="filter-chip" *ngIf="pretraga.trim()" (click)="ukloniPretragu()">
+        „{{ pretraga }}” <mat-icon>close</mat-icon>
+      </button>
+      <button type="button" class="filter-chip" *ngIf="statusFilter !== 'svi'" (click)="ukloniStatus()">
+        {{ statusFilter }} <mat-icon>close</mat-icon>
+      </button>
+      <button type="button" class="filter-chip" *ngIf="vrstaFilter !== 'sve'" (click)="ukloniVrstu()">
+        {{ vrstaFilter }} <mat-icon>close</mat-icon>
+      </button>
+      <button mat-button type="button" (click)="ocistiFiltere()">Očisti sve</button>
+    </div>
+  </mat-card>
 
   <div class="spinner" *ngIf="ucitavanje"><mat-spinner diameter="40"></mat-spinner></div>
 
-  <table mat-table [dataSource]="prikazani" class="tabela" *ngIf="!ucitavanje">
-    <ng-container matColumnDef="sifra">
-      <th mat-header-cell *matHeaderCellDef>Šifra</th>
-      <td mat-cell *matCellDef="let u">{{ u.sifra }}</td>
-    </ng-container>
-    <ng-container matColumnDef="naziv">
-      <th mat-header-cell *matHeaderCellDef>Naziv</th>
-      <td mat-cell *matCellDef="let u">{{ u.naziv }}</td>
-    </ng-container>
-    <ng-container matColumnDef="vrsta">
-      <th mat-header-cell *matHeaderCellDef>Vrsta</th>
-      <td mat-cell *matCellDef="let u">{{ u.vrsta }}</td>
-    </ng-container>
-    <ng-container matColumnDef="prijem">
-      <th mat-header-cell *matHeaderCellDef>Prijem</th>
-      <td mat-cell *matCellDef="let u">{{ u.datumPrijema | datumSr }}</td>
-    </ng-container>
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let u">
+  <div class="tabela-omot" *ngIf="!ucitavanje && prikazani.length">
+    <table mat-table [dataSource]="prikazani" class="tabela uzorci-tabela">
+      <ng-container matColumnDef="sifra">
+        <th mat-header-cell *matHeaderCellDef>Šifra</th>
+        <td mat-cell *matCellDef="let u"><strong>{{ u.sifra }}</strong></td>
+      </ng-container>
+      <ng-container matColumnDef="naziv">
+        <th mat-header-cell *matHeaderCellDef>Uzorak</th>
+        <td mat-cell *matCellDef="let u">
+          <span class="naziv-celija"><strong>{{ u.naziv }}</strong><small>{{ u.poreklo }}</small></span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="vrsta">
+        <th mat-header-cell *matHeaderCellDef>Vrsta</th>
+        <td mat-cell *matCellDef="let u">{{ u.vrsta }}</td>
+      </ng-container>
+      <ng-container matColumnDef="prijem">
+        <th mat-header-cell *matHeaderCellDef>Prijem</th>
+        <td mat-cell *matCellDef="let u">{{ u.datumPrijema | datumSr }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let u">
+          <span class="oznaka" [ngClass]="klasaStatusa(u.status)">{{ u.status }}</span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="kolone"></tr>
+      <tr mat-row *matRowDef="let red; columns: kolone" class="red" [routerLink]="['/uzorci', red.id]"></tr>
+    </table>
+  </div>
+
+  <div class="mobilni-uzorci" *ngIf="!ucitavanje && prikazani.length">
+    <a class="mobilni-uzorak" *ngFor="let u of prikazani" [routerLink]="['/uzorci', u.id]">
+      <span class="mobilni-vrh">
+        <strong>{{ u.sifra }}</strong>
         <span class="oznaka" [ngClass]="klasaStatusa(u.status)">{{ u.status }}</span>
-      </td>
-    </ng-container>
+      </span>
+      <span class="mobilni-naziv">{{ u.naziv }}</span>
+      <span class="mobilni-meta">
+        <span><mat-icon>category</mat-icon>{{ u.vrsta }}</span>
+        <span><mat-icon>event</mat-icon>{{ u.datumPrijema | datumSr }}</span>
+      </span>
+      <span class="mobilni-poreklo">{{ u.poreklo }}</span>
+    </a>
+  </div>
 
-    <tr mat-header-row *matHeaderRowDef="kolone"></tr>
-    <tr mat-row *matRowDef="let red; columns: kolone" class="red" [routerLink]="['/uzorci', red.id]"></tr>
-  </table>
-
-  <p class="prazno" *ngIf="!ucitavanje && prikazani.length === 0">Nema uzoraka koji odgovaraju pretrazi.</p>
+  <div class="prazno-red" *ngIf="!ucitavanje && prikazani.length === 0">
+    <mat-icon>science</mat-icon>
+    <h2>{{ imaAktivneFiltere ? 'Nema odgovarajućih uzoraka' : 'Još nema uzoraka' }}</h2>
+    <p>{{ imaAktivneFiltere ? 'Promeni ili ukloni aktivne filtere.' : 'Dodaj prvi uzorak da započne laboratorijski tok.' }}</p>
+    <button mat-stroked-button *ngIf="imaAktivneFiltere" (click)="ocistiFiltere()">Očisti filtere</button>
+    <a mat-raised-button color="primary" *ngIf="!imaAktivneFiltere" routerLink="/uzorci/novo">Novi uzorak</a>
+  </div>
 </section>
